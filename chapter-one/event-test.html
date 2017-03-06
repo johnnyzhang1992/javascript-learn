@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduction to the DOM</title>
+    <script>
+        // 我们必须在文档完成加载后再操作DOM
+        window.onload = function () {
+            //获取文档中所有的<li>元素,给他们添加上事件处理函数(event,handler)
+            var li = document.getElementsByTagName("li");
+            for(var i=0;i < li.length;i++){
+                //给这个<li>元素家伙是哪个 mouseover 的事件处理函数，
+                //他将这个li 的背景颜色改为蓝色
+                li[i].onmouseover = function () {
+                    this.style.background = 'blue';
+                };
+                //给这个<li>元素家伙是哪个 mouseout 的事件处理函数，
+                //他将这个li 的背景颜色改为白色
+                li[i].onmouseout = function () {
+                    this.style.background = "white";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Introduction to the DOM</h1>
+<p class="test">
+    There are number of reasons of why the DOM is awesome,here are some:
+</p>
+<ul>
+    <li id="everywhere">It can be found everywhere.(3 seconds will display none)</li>
+    <li class="test">Tt's easy to use.</li>
+    <li class="test">It can help you to find what you want, really quickly.</li>
+</ul>
+</body>
+</html>

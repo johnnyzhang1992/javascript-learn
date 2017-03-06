@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduction to the DOM</title>
+    <script>
+        // 我们必须在文档完成加载后再操作DOM
+        window.onload = function () {
+            //获取文档中所有的<li>元素
+            var li = document.getElementsByTagName("li");
+            //并给他们全部添加一个黑色边框
+            for(var i=0;i < li.length;i++){
+                li[i].style.border = "1px solid #000"
+            }
+            //延时三秒钟执行
+            setTimeout(function () {
+                //获取ID为'everywhere' 的元素
+                var every = document.getElementById("everywhere");
+                //从文档中删除这个元素
+                every.parentNode.removeChild(every);
+            },3000)
+        }
+    </script>
+</head>
+<body>
+<h1>Introduction to the DOM</h1>
+<p class="test">
+    There are number of reasons of why the DOM is awesome,here are some:
+</p>
+<ul>
+    <li id="everywhere">It can be found everywhere.(3 seconds will display none)</li>
+    <li class="test">Tt's easy to use.</li>
+    <li class="test">It can help you to find what you want, really quickly.</li>
+</ul>
+</body>
+</html>

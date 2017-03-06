@@ -1,5 +1,7 @@
 # javascript-learn
-JavaScript 高级程序设计（第三版）
+## 参考书籍
+JavaScript 高级程序设计（第三版）<br>
+精通 JavaScript
 ### 第一章： JavaScript 简介
   JavaScript是一种转为与网页交互而设计的脚本语言，由以下三个部分组成：
   <ul>
