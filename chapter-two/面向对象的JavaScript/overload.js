@@ -67,8 +67,6 @@ function strict(types,args) {
     }
     //遍历所有的参数，检查它们的类型
     for(var i=0;i<args.length;i++){
-        console.info(args[i].constructor);
-        console.info(types[i]);
         if(args[i].constructor != types[i]){
             throw "Invalid number of arguments. Expected " +types[i].name +", received "+args[i].constructor.name + " instead.";
         }
