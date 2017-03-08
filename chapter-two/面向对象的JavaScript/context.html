@@ -5,6 +5,50 @@
     <title>上下文对象</title>
 </head>
 <body>
-
+<div id="main">这是一段测试文字</div>
 </body>
+<script>
+    /** 在上下文对象内使用函数并将其上下文对象切换为另一个变量 */
+    var obj = {
+        yes : function () {
+            // this == obj
+            this.val = true;
+        },
+        no : function () {
+            this.val = false;
+        }
+    };
+    // 我们发现 ‘obj’对象没有val 属性
+    console.info( obj.val == null);
+    //true
+    // 执行了 yes 函数后，将 val 属性与 'obj' 对象关联起来
+    obj.yes();
+    console.info( obj.val == null);
+    // 现在把window.no 指向 obj.no 并执行之
+    window.no = obj.no;
+    window.no();
+    //结果是 obj 对象的 val 不变（因为 no的上下文已经改变为 window 对象了）
+    console.info(obj.val == true);
+    console.info(window.val == false);
+
+    /**  一个设置上下文对象颜色样式的简单函数 */
+    function changeColor(color){
+        this.style.color = color;
+    }
+    // 在 window 对象中调用此函数会失败，因为window 对象没有style 属性
+
+   // 找到 ID 为 main  的文档
+    var main =document.getElementById("main");
+    // 使用call 方法将它的颜色设为黑色。call 方法将上下文对象设置为第一个参数
+    // 并将其他参数作为原函数的参数
+    changeColor.call(main,"black");
+
+    //设置 body 元素的颜色的函数
+    function setBodyColor() {
+        // apply 方法将上下文对象设置为第一个参数指定的 body 元素，第二个参数是传给函数的所以参数的数组
+        changeColor.apply(document.body,arguments)
+    }
+    // 将body 的背景色设为黑色
+    setBodyColor("black")
+</script>
 </html>
