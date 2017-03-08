@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+</head>
+<body>
+<div id="main">main</div>
+</body>
+<script>
+    /** 闭包*/
+    // 用闭包实现函数的currying 化
+
+    /** 数字求和函数的函数生成器 */
+    function addGenerator( num) {
+        // 返回一个简单的函数，求两个数字的和，其中一个数字来自生成器
+        console.info("num:"+num);
+        return function (toAdd) {
+            console.info("toAdd:"+toAdd);
+            return num + toAdd
+        };
+    }
+    // addFive 现在包含一个单一参数的函数，这个函数能求得 5 加上该参数的和
+    var addFive = addGenerator(5);// 此时addFive 成为了一个函数 function(toAdd){ return 5 + toAdd}
+    // 这里我们可以看到，在传入参数为4时，addFive 函数的结果是 9
+    console.log( addFive(4) );
+
+    /** 使用匿名函数来隐藏全局作用域变量的例子 */
+    //创建一个新的匿名函数，作为包装
+    ( function () {
+        //变量原本应该是全局的
+        var msg = " Thanks for visited!";
+        // 将一个新函数绑定到全局变量
+        window.onunload = function() {
+            //这个函数使用了“隐藏”的msg 变量
+            console.log(msg)
+        };
+        //关闭匿名函数并执行
+    })();
+
+    /** 使用匿名函数来激发出创建多个使用闭包函数所需的作用域 */
+    //一个ID为main 的元素
+    var obj  = document.getElementById("main");
+    // 用于绑定的一个数组
+    var items = ["click","keypress"];
+    // 遍历数组的每一个成员
+    for( var i = 0;i<items.length;i++){
+        // 使用一个子之行的匿名函数来激发出作用域
+        (function () {
+            // 记住在这个作用域内的值
+            var item = items[i];
+            // 将一个函数绑定到该元素
+            obj["on"+ item] = function () {
+                // item 引用本 for 循环上下文所属作用域中的一个父变量
+                console.log("Thanks for your " + item)
+            }
+        })()
+    }
+</script>
+</html>
+
+
