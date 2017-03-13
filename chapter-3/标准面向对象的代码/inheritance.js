@@ -116,7 +116,7 @@ Function.method('swiss', function (parent) {
      如果用在多个父对象上就能获得可用的多对象继承。
  */
 
-// 函数示例
+/** 类式继承函数示例 */
 
 //创建一个新的 Person 对象构造函数
 

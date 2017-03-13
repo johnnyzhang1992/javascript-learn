@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+    <script src="_Base.js"></script>
+</head>
+<body>
+<div id="main">引用了Base.js, version 1.1<br>
+    Copyright 2006-2010, Dean Edwards </div>
+</body>
+<script>
+    /**
+     * Created by zq199 on 2017/3/13.
+     */
+    /** Base 库 */
+    /* 用base 库进行简单对象创建于继承的例子 */
+    //创建一个新的Person 类
+    var Person =  Base.extend({
+        // Person 类的构造函数
+        constructor: function (name) {
+            this.name = name;
+        },
+        // Person 类的一个简单方法
+        getName : function () {
+            return this.name;
+        }
+    });
+    // 创建一个新的继承自 Person 类的 User 类
+    var User = Person.extend({
+        // 创建 User类的构造函数
+        constructor: function (name,password) {
+            // 这个函数实际上调用了父类的构造函数
+            this.base(name);
+            this.password = password;
+        },
+        // 给 User类提供了另一个简单的方法
+        getPassword: function () {
+            return this.password;
+        }
+    });
+    var user = new User("John",'123');
+    console.info(user.getName());//John
+    console.info(user.getPassword());//123
+</script>
+</html>
