@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM - 示例文档</title>
+</head>
+<body>
+<h1>Introduction to the DOM</h1>
+<p class="test">
+    There are number of reasons of why the DOM is awesome,here are some:
+</p>
+<ul>
+    <li id="everywhere">It can be found everywhere.(3 seconds will display none)</li>
+    <li class="test">Tt's easy to use.</li>
+    <li class="test">It can help you to find what you want, really quickly.</li>
+</ul>
+</body>
+<script>
+    function cleanWhitespace(element) {
+        // 如果不提供参数，则处理整个HTML文档
+        element = element || document;
+        // 使用第一个子节点作为开始指针
+        var cur = element.firstChild;
+
+        // 一直到没有子节点为止
+        while( cur != null){
+            // 如果节点是文本节点，并且只包含空格
+            if( cur.nodeType == 3 && ! /\S/.test(cur.nodeValue)){
+                // 删除这个文本节点
+                element.removeChild(cur);
+
+                // 否则他就是一个元素
+            }else if( cur.nodeType == 1){
+                // 递归整个文档
+                cleanWhitespace(cur);
+            }
+            console.info(cur.nodeType);
+            cur = cur.nextSibling;//遍历子节点
+        }
+    }
+    cleanWhitespace();
+    console.log(document.getElementById('everywhere').nextSibling);
+    // 为所有HTML DOM元素动态绑定到新的DOM遍历函数
+    HTMLElement.prototype.next = function () {
+        var elem = this;
+        do{
+            elem = elem.nextSibling;
+        }while (elem && elem.nodeType != 1);
+        return elem;
+    };
+    console.log(document.getElementsByTagName('li'));
+    /**  标准的DOM方法 */
+    /*
+    1.document.getElementById(''):只能运行在document下，迅速的访问一个元素最快的方法；
+    2.getElementsByTagName('li'):能运行在任何元素下，找到该元素下的所有标签下为li的后代元素，并返回一个NodeList(节点列表)；
+    3.
+     */
+    function id(name) {
+        return document.getElementById(name);
+    }
+    function tag(name,elem) {
+        // 如果不提供上下文元素，则遍历整个文档
+        return (elem || document).getElementsByTagName(name);
+    }
+
+    /** 通过类的值查找元素 */
+    /*
+       遍历所有元素（或者某元素的所有后代）直至找到指定类的元素
+     */
+    // 找出全部有指定类值的元素的函数
+    function hasClass(name,type) {
+        var r = [];
+        // 定位到类值上（允许多类值）
+        var re = new RegExp("(^|\\s)" + name + "(\\s|$)");//这个正则不对！！！
+        // 限制类型的查找，或者遍历所有元素
+        var e = document.getElementsByTagName(type || "*");
+        console.log("e_length:"+e.length);
+        for( var j = 0;j < e.length;j++){
+            // 如果元素拥有指定类，把它添加到函数的返回值中
+            if( re.test(e[j])){ r.push(e[j])}
+        }
+        // 返回符合的元素列表
+        return r;
+    }
+    hasClass("test");
+    hasClass("test","li");
+    hasClass("test","li")[0];
+</script>
+</html>

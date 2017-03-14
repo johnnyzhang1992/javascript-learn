@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取元素的内容</title>
+</head>
+<body>
+<h1>Introduction to the DOM</h1>
+<p class="test">
+    There are number of reasons of why the DOM is awesome,here are some:
+</p>
+<ul>
+    <li id="everywhere"><strong>strong</strong>, It can be found everywhere.</li>
+    <li class="test">Tt's easy to use.</li>
+    <li class="test1">It can help you to find what you want, really quickly.</li>
+</ul>
+</body>
+<script>
+    // 一个获取元素文本内容的通用函数
+    function text(e) {
+        var t = "";
+        // 如果传入的是元素，则继续遍历其子元素
+        // 否则假定它是一个数组
+        e = e.childNodes || e;
+        // 遍历所有子节点
+        for( var j = 0;j < e.length;j++){
+            // 如果不是元素，追加其文本值
+            // 否则，递归遍历所有元素的子节点
+            t += e[j].nodeType != 1 ? e[j].nodeValue : text(e[j].childNodes)
+        }
+        // 返回匹配的文本
+        return t;
+    }
+    var _text = text(document.getElementById('everywhere'));//"strong, It can be found everywhere.(3 seconds will display none)"
+   console.info("text:"+_text);
+    // 获取元素内的 HTML
+    var content = document.getElementById('everywhere').innerHTML;
+    console.info("html:"+content);
+    //操作元素特性
+    //获取
+    document.getElementById('everywhere').getAttribute('id');
+    //设置
+    document.getElementById('everywhere').setAttribute("data-id","100");
+</script>
+</html>
