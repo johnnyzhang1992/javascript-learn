@@ -41,5 +41,38 @@
     document.getElementById('everywhere').getAttribute('id');
     //设置
     document.getElementById('everywhere').setAttribute("data-id","100");
+    /** 获取和设置元素特性的值 */
+    function attr(elem,name,value) {
+        // 确保提供的 name 是正确的
+        if( !name || name.constructor != String ){
+            //如果name参数不存在或者它的类型不是字符串
+            // 返回 ''
+            return '';
+        }
+        // 检查 name 是否处在怪异命名的情形中
+        name = { 'for': 'htmlFor','class': 'className'}[name] || name ;
+        console.info("name:"+name);
+        // 如果用户传入value值的话
+        if( typeof value != 'undefined'){
+            // 首先使用快捷方式
+            elem[name] = value;
+            // 可以的话使用 setAttribute
+            if(elem.setAttribute){
+                elem.setAttribute(name,value);
+            }
+        }else{
+            // 否则特性值默认为空
+            elem[name] = '';
+            // 可以的话使用 setAttribute
+            if(elem.setAttribute){
+                elem.setAttribute(name,'');
+            }
+        }
+        // 返回特性的值
+        return elem[name] || elem.getAttribute(name) || '';
+    }
+    attr(document.getElementById('everywhere'),'class_1','noClass');
+    attr(document.getElementById('everywhere'),'for','no');
+    attr(document.getElementById('everywhere'),'data-name');
 </script>
 </html>
