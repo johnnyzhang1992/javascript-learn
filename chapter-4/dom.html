@@ -49,6 +49,40 @@
         return elem;
     };
     console.log(document.getElementsByTagName('li'));
+    //查找相关元素的前一个兄弟元素的函数
+    function prev(elem) {
+        do{
+            elem  = elem.previousSibling;
+        }while (elem && elem.nodeType != 1);
+        return elem;
+    }
+    //查找相关元素的下一个兄弟元素的函数
+    function next(elem) {
+        do{
+            elem  = elem.nextSibling;
+        }while (elem && elem.nodeType != 1);
+        return elem;
+    }
+    //查找元素的第一个子元素的函数
+    function first(elem) {
+        elem = elem.firstChild;
+        return elem && elem.nodeType !=1 ? next(elem) : elem;
+    }
+    //查找元素的最后一个子元素的函数
+    function last(elem) {
+        elem = elem.lastChild;
+        return elem && elem.nodeType !=1 ? prev(elem) : elem;
+    }
+    //查找元素父元素的函数
+    function parent(elem,num) {
+        num = num || 1;
+        for(var i = 0;i<num;i++){
+            if(elem != null){
+                elem = elem.parentNode;
+            }
+        }
+        return elem;
+    }
     /**  标准的DOM方法 */
     /*
     1.document.getElementById(''):只能运行在document下，迅速的访问一个元素最快的方法；

@@ -9,12 +9,147 @@
             padding: 50px 0;
             width: 80%;
         }
+        .text-content{
+            padding: 20px;
+            background: #eee;
+        }
     </style>
 </head>
 <body>
 <p>
     修改DOM 有三个步骤:首先要知道怎么创建一个新元素，然后要知道如何把它插入DOM 中，最后学习如何删除他
 </p>
-
+<p>1.0 使用DOM 创建节点</p>
+<div class="text-content">
+    修改DOM 的主要方法时使用 createElement 函数。
+</div>
+<ul class="item-list">
+    <li>item one</li>
+</ul>
+<!--<ul class="item-list">-->
+    <!--<li class="item" className="item">Thanks for Visiting !</li>-->
+    <!--<li class="item">item one</li>-->
+<!--</ul>-->
 </body>
+<script src="dom.js"></script>
+<script>
+    // 创建新 DOM 元素的通用函数
+    function create(elem) {
+        return document.createElementNS ? document.createElementNS('http://baidu.com',elem) : document.createElement(elem);
+    }
+    var div = create('div');
+    div.className = "items";
+    div.id = "all";
+    /**
+     * 插入到DOM 中
+     */
+//    parentOfBeforeNode.insertBefore(nodeToInsert,beforeNode);
+//    parentElem.appendChild(nodeToInsert);
+
+    // 在另一个元素之前插入元素的函数
+    function old_before(parent,before,elem) {
+        // 检查 parent 是否传入
+        if(elem == null){
+            elem = before;
+            before = parent;
+            parent = before.parentNode;
+        }
+        parent.insertBefore(checkElem(elem),before);
+    }
+    // 为另一个元素追加一个子元素的函数
+    function old_append(parent,elem) {
+        parent.appendChild(checkElem(elem));
+    }
+//     before 和 append 的辅助函数
+    function checkElem(elem) {
+        // 如果只提供字符串，则把它转化成文本节点
+        return elem && elem.constructor == String ? document.createTextNode(elem) : elem;
+    }
+    // 使用append 和 before 函数
+    // 创建一个新的 <li> 元素
+//    var li = create('li');
+//    attr(li,'class1','item');
+//    old_append(li,"Thanks for Visiting !");
+    // 把 <li> 插入到有序列表的顶端
+//    old_before( first(tag('ul')[0]),li);
+    // 转化一个DOM 节点/HTML 字符串混合型参数数组为纯粹的DOM节点数组
+    function changeElem(a) {
+        var r = [];
+        // 如果参数不是数组，则强行转换
+        if(a.constructor != Array){ a = [a];}
+        for(var i = 0;i < a.length;i++){
+            // 如果是字符串
+            if( a[i].constructor == String){
+                // 用一个临时元素来存放 HTML
+                var div = document.createElement("div");
+
+                // 注入 HTML ，转换成DOM 结构
+                div.innerHTML = a[i];
+                // 提取DOM结构到临时div中
+                for(var j =0;j<div.childNodes.length;j++){
+                    r[r.length] = div.childNodes[j];
+                }
+            }else if(a[i].length){ //如果不是数组
+                // 假定是DOM节点数组
+                for(var j = 0;j< a[i].length;j++){
+                    r[r.length] = a[i][j];
+                }
+            }else{
+                r[r.length] = a[i];
+            }
+        }
+        return r;
+    }
+    //插入和追加内容到DOM的改进函数
+    function before( parent,before,elem) {
+        // 检查 parent 是否传入
+        if(elem == null){
+            elem = before;
+            before = parent;
+            parent = before.parentNode;
+        }
+        //获取元素的新数组
+        var elems = changeElem(elem);
+        
+        // 向后遍历数组
+        // 因为我们向前插入元素
+        for( var i = elems.length -1;i>=0;i--){
+            parent.insertBefore(elems[i],before);
+        }
+    }
+    function append(parent,elem) {
+        //获取元素的数组
+        var elems = changeElem(elem);
+
+        // 把他们都追加到元素中
+        for( var i = 0; i<elems.length;i++){
+            parent.appendChild(elems[i])
+        }
+    }
+    append(tag("ul")[0],"<li>Mouse trap.</li>");
+    before(tag("ul")[0],tag('li')[0],['<li>Insert Before</li>','<li>Last</li>']);
+
+    /**
+     * 删除DOM节点
+     */
+//    NodeParent.removeChild(NodeToRemove)
+    // 删除DOM节点的函数
+    function remove(elem) {
+        if(elem){
+            elem.parentNode.removeChild(elem);
+        }
+    }
+    /* 从一个函数中删除所以子节点的函数*/
+    function empty(elem) {
+        while (elem.firstChild){
+            remove(elem.firstChild)
+        }
+    }
+    setTimeout(function () {
+        remove(last(tag('ul')[0]))
+    },1000);
+    setTimeout(function () {
+        empty(tag('ul')[0])
+    },2000)
+</script>
 </html>
