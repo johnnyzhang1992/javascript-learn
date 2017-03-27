@@ -74,12 +74,32 @@ for( var i=0;i<li.length;i++){
 
 // 阻止事件冒泡的通用函数
 function stopBubble(e) {
-    // 如果传入了时间对象，那么就是非IE浏览器
+    // 如果传入了事件对象，那么就是非IE浏览器
     if( e && e.stopPropagation){
         // 因此它支持W3C的stopPropagation() 方法
         e.stopPropagation();
     }else{
         // 否则，我们得使用IE的方式来取消事件冒泡
         window.event.cancelBubble = true;
+    }
+}
+
+// 使用 stopBubble()来创建元素的交互集
+  // 定位遍历所有的DOM元素
+var all = document.getElementsByTagName("*");
+for( var i = 0;i<all.length;i++){
+
+    // 监听用户鼠标，当移动到元素上时
+    // 为元素加上红色边框
+    all[i].onmouseover = function (e) {
+        this.style.border = "1px solid red";
+        stopBubble(e);
+    };
+
+    // 检查用户鼠标，当移开元素时
+    // 删除我们加上的边框
+    all[i].onmouseout = function (e) {
+        this.style.border = "0px";
+        stopBubble(e);
     }
 }
