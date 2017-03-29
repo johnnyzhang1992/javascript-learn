@@ -103,3 +103,108 @@ for( var i = 0;i<all.length;i++){
         stopBubble(e);
     }
 }
+
+/*
+  重载浏览器的默认行为
+ */
+
+// 防止发生默认浏览器行为的通用函数
+function stopDefault(e) {
+    // 防止默认浏览器行为（W3C）
+    if(e && e.preventDefault){
+        e.preventDefault();
+    }else{
+        // IE 中阻止浏览器行为的捷径
+        window.event.returnValue = false;
+    }
+    return false;
+}
+
+// 使用 stopDefault()重载浏览器功能
+  // 假设页面中已经存在一个iframe ，它的ID 是iframe
+var iframe = document.getElementById("iframe");
+
+// 定位页面上所有的<a>元素
+var a = document.getElementsByTagName("a");
+for(var i =0;i<a.length;i++){
+    // 为 <a> 绑定点击处理函数
+    a[i].onclick = function (e) {
+        // 设置iframe的地址
+        iframe.src = this.href;
+        console.log(this.href);
+
+        // 防止浏览器访问<a> 所指向的网站（这是一个默认行为）
+        return stopDefault(e);
+    }
+}
+/*
+  绑定事件监听函数
+ */
+
+// 传统绑定
+
+// 使用事件绑定的传统方法绑定事件
+  // 查找第一个<form>元素并为它绑定 'submit' 事件处理函数
+document.getElementsByTagName("form")[0].onsubmit = function (e) {
+    // 停止表单提交的默认行为
+    return stopDefault(e);
+};
+  // 为文档的 <body> 元素绑定敲击事件处理函数
+document.body.onkeypress = myKeyPressHandler;
+function myKeyPressHandler() {
+    
+}
+ // 为页面绑定加载事件处理函数
+window.onload = function () {};
+
+/*
+  DOM绑定： W3C
+ */
+
+// 使用w3c 方式绑定事件处理函数的例子
+  // 查找第一个<form>元素并为它绑定 'submit' 事件处理函数
+document.getElementsByTagName("form")[0].addEventListener('submit',function (e) {
+    // 停止表单提交的猫人行为
+    return stopDefault(e);
+},false);
+// 为文档的 <body> 元素绑定敲击事件处理函数
+document.body.addEventListener('keypress',myKeyPressHandler,false);
+
+/*
+ DOM 绑定：IE
+ */
+
+// 使用IE方式为元素绑定事件处理函数的例子
+ // 查找第一个<form>元素并为它绑定 'submit' 事件处理函数
+/** IE 11 不在支持attachEvent()方法 */
+// document.getElementsByTagName("form")[0].attachEvent('onsubmit',function () {
+//     // 停止表单提交的默认行为
+//     return stopDefault();
+// });
+// // 为文档的 <body> 元素绑定敲击事件处理函数
+// document.body.attachEvent('onkeypress',myKeyPressHandler);
+
+/*
+  addEvent 和 removeEvent
+ */
+
+// 使用 addEvent()函数的diamante例子
+
+// 等待页面完全载入
+addEvent(window,"load",function () {
+
+    // 监听用户的任意敲击
+    addEvent(document.body,"keypress",function (e) {
+        // 如果用户敲击 空格+Ctrl键
+        console.log(e.keyCode);
+        if(e.ctrlKey){
+            console.log("ctrl");
+        }
+        if( e.keyCode == 32 && e.ctrlKey){
+            // 展示我们的特定表单
+            this.getElementsByTagName("form")['1'].style.display = 'block';
+            // 确保没有奇怪的事情发生
+            e.preventDefault(e);
+        }
+    })
+});

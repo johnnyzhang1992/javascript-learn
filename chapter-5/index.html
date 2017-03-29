@@ -14,6 +14,8 @@
         }
         .item{
             border-bottom: 1px solid #ddd;
+            clear: both;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -33,9 +35,28 @@
             <p>实例二：</p>
             <textarea name="" id="" cols="30" rows="10"></textarea>
         </div>
+        <div class="item">
+            <p>实例三：</p>
+            <p><a href="http://baidu.com">百度</a></p>
+            <iframe id="iframe" style="width: 1000px;height: 300px">
+
+            </iframe>
+        </div>
+        <div class="item">
+            <p>实例四：</p>
+            <form action="">
+                <label for="">第一个form</label>
+                <input type="text" placeholder="input">
+            </form>
+            <form action="" style="display: none">
+                <label for="">第二个form</label>
+                <input type="text">
+            </form>
+            <p>bottom</p>
+        </div>
     </div>
-    
 </div>
 </body>
+<script src="addEvent.js"></script>
 <script src="event.js"></script>
 </html>
