@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript 与 CSS</title>
+    <style>
+        .content{
+            margin: 0 auto;
+            margin-top: 100px;
+            width:1000px;
+            padding: 50px 20px;
+        }
+        .item{
+            border-bottom: 1px solid #ddd;
+            clear: both;
+            overflow: hidden;
+        }
+        p{
+            position: static;
+            top:0;
+            left:0;
+        }
+    </style>
+    <script>
+        window.onload  = function () {
+            // 定位到段落并检查它的高度
+            var p = document.getElementsByTagName("p")[0];
+
+            // 使用传统的方式来检查(检查的是元素内联css)
+            console.log(p.style.height + "-should be null");
+
+            // 检查最终高度的值
+            console.log(getStyle(p,"height") + "-should be 100px");
+            // 获取 p 的相对位置
+            console.log("X:"+pageX(p));
+            console.log("Y:"+pageY(p));
+            console.log("left:"+posX(p));
+            console.log("top:"+posY(p));
+            addX(p,100);
+            addY(p,50)
+        }
+    </script>
+</head>
+<body>
+<div class="content">
+    <div class="item">
+        <h3>实例一：获取元素的样式对象值</h3>
+        <p>Get the p tall.</p>
+    </div>
+</div>
+</body>
+<script src="style.js"></script>
+</html>
