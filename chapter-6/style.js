@@ -203,3 +203,35 @@ function restoreCSS( elem, prop ) {
     for ( var i in prop )
         elem.style[ i ] = prop[ i ];
 }
+
+/** --------元素的可见性 ------------ */
+
+// ------ 使用CSS的display属性来切换元素可见性的一组函数
+ // 使用display隐藏元素的函数
+function hide(elem) {
+    // 找出元素display的当前状态
+    var curDisplay = getStyle(elem,"display");
+
+    // 记录它的display状态
+    if( curDisplay != 'none'){
+        elem.$oldDisplay = curDisplay;
+    }
+    elem.style.display = 'none'
+}
+// 使用display 显示元素的函数
+function show(elem) {
+   // 设置display 属性为它的原始值，如没有记录有原始值，则使用'block'
+    elem.style.display = elem.$oldDisplay || '';
+}
+
+// ------调节元素透明度的函数
+// 设置元素的透明度（级别从0-100）
+function setOpacity(elem,level) {
+    // 如果存在 filters 这个属性，则他是IE，所以设置Alpha 滤镜
+    if(elem.filters){
+        elem.style.filters = 'alpha(opacity='+ level+')';
+    }else {
+        // 否则，使用W3C的opacity属性
+        elem.style.opacity = level /100;
+    }
+}
