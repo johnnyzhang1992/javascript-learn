@@ -206,7 +206,7 @@ function restoreCSS( elem, prop ) {
 
 /** --------元素的可见性 ------------ */
 
-// ------ 使用CSS的display属性来切换元素可见性的一组函数
+// ------ 使用CSS的display属性来切换元素可见性的一组函数--------
  // 使用display隐藏元素的函数
 function hide(elem) {
     // 找出元素display的当前状态
@@ -224,7 +224,7 @@ function show(elem) {
     elem.style.display = elem.$oldDisplay || '';
 }
 
-// ------调节元素透明度的函数
+// ------调节元素透明度的函数--------
 // 设置元素的透明度（级别从0-100）
 function setOpacity(elem,level) {
     // 如果存在 filters 这个属性，则他是IE，所以设置Alpha 滤镜
@@ -234,4 +234,90 @@ function setOpacity(elem,level) {
         // 否则，使用W3C的opacity属性
         elem.style.opacity = level /100;
     }
+}
+
+/** ---------动画--------------------*/
+
+/* ----------滑动-------------*/
+//----通过在短时间内增加高度逐步显示隐藏元素的函数-----
+function slideDown(elem) {
+    // 从0 高度开始滑动
+    elem.style.height = '0px';
+
+    //先显示元素（但是看不见它，因为它的高度是0）
+    show(elem);
+
+    // 找到元素的完整的潜在高度
+    var h = fullHeight(elem);
+
+    // 我们在1秒钟内执行一个20帧的动画
+    for( var i = 0;i<= 100;i +=5){
+        // 保证我们能够保证正确的 'i'的闭包函数
+        (function () {
+            var pos = i;
+            // 设置timeout 以让它能在指定的时间点运行
+            setTimeout(function () {
+                // 设置元素的新高度
+                elem.style.height = ((pos/100)*h) + 'px';
+            },((pos +1)*10))
+        })()
+    }
+}
+
+/* ---------- 渐显 -------------*/
+function fadeIn(elem) {
+    // 从0透明度开始
+    setOpacity(elem,0);
+
+    // 先显示元素，但是看不见它，因为它的透明度为0
+    show(elem);
+
+    // 我们在1秒钟内执行一个20帧的动画
+    for( var i = 0;i<= 100;i +=5){
+        // 保证我们能够保证正确的 'i'的闭包函数
+        (function () {
+            var pos = i;
+            // 设置timeout 以让它能在指定的时间点运行
+            setTimeout(function () {
+                // 给元素设置一个新的透明度
+              setOpacity(elem,pos)
+            },((pos +1)*10))
+        })()
+    }
+}
+
+/** --------- 浏览器 --------------------*/
+
+/* ---------- 鼠标位置 -------------*/
+
+// ----------- 两个通用函数，用以获取鼠标光标相对于整个页面的当前位置 ---
+
+// 获取光标的水平位置
+function getX(e) {
+    // 标准事件对象
+    e = e || window.event;
+
+    // 先检查非 IE浏览器的位置，再检查IE的位置
+    return e.pageX || e.clientX + document.body.scrollLeft;
+}
+// 获取光标的垂直位置
+function getY(e) {
+    // 标准事件对象
+    e = e || window.event;
+
+    // 先检查非 IE浏览器的位置，再检查IE的位置
+    return e.pageY || e.clientY + document.body.scrollTop;
+}
+
+//----------------两个获取鼠标相对于当前元素位置的函数 ---------
+
+// 获取鼠标相对于当前元素（事件对象'e'的属性target）的X位置
+function getElementX(e) {
+    // 获取正确的元素偏移量
+    return ( e && e.layerX) || window.event.offsetX;
+}
+// 获取鼠标相对于当前元素（事件对象'e'的属性target）的Y位置
+function getElementY(e) {
+    // 获取正确的元素偏移量
+    return ( e && e.layerY) || window.event.offsetY;
 }

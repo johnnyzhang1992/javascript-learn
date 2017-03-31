@@ -6,7 +6,7 @@
     <style>
         .content{
             margin: 0 auto;
-            margin-top: 100px;
+            margin-top: 50px;
             width:1000px;
             padding: 50px 20px;
         }
@@ -20,24 +20,23 @@
             top:0;
             left:0;
         }
+        #slide-down,#fade-in{
+            background: #000000;
+            padding: 30px;
+            width: 100px;
+        }
+        #fade-in{
+            height: 100px;
+        }
     </style>
     <script>
         window.onload  = function () {
             // 定位到段落并检查它的高度
             var p = document.getElementsByTagName("p")[0];
-
-            // 使用传统的方式来检查(检查的是元素内联css)
-            console.log(p.style.height + "-should be null");
-
-            // 检查最终高度的值
-            console.log(getStyle(p,"height") + "-should be 100px");
-            // 获取 p 的相对位置
-            console.log("X:"+pageX(p));
-            console.log("Y:"+pageY(p));
-            console.log("left:"+posX(p));
-            console.log("top:"+posY(p));
             addX(p,100);
-            addY(p,50)
+            addY(p,50);
+            slideDown(document.getElementById("slide-down"));
+            fadeIn(document.getElementById("fade-in"))
         }
     </script>
 </head>
@@ -46,6 +45,13 @@
     <div class="item">
         <h3>实例一：获取元素的样式对象值</h3>
         <p>Get the p tall.</p>
+    </div>
+    <div class="item">
+        <h3>实例二：动画</h3>
+        <h4>1.动画-高度变化</h4>
+        <div id="slide-down"></div>
+        <h4>2.动画-渐显</h4>
+        <div id="fade-in"></div>
     </div>
 </div>
 </body>
