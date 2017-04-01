@@ -7,11 +7,11 @@
 function getStyle(elem ,name) {
     // 如果属性存在于style[]中，那么它已被设置了(并且是当前的)
     if( elem.style[name]){
-        console.log("Normal");
+        // console.log("Normal");
         return elem.style[name];
     }else if(elem.currentStyle){
         // 否则，尝试使用IE的方法
-        console.log("IE");
+        // console.log("IE");
         return elem.currentStyle[name];
     }else if( document.defaultView &&　document.defaultView.getComputedStyle){
         // 或者W3C 的方法，如果存在的话
@@ -22,11 +22,11 @@ function getStyle(elem ,name) {
 
         // 获取样式对象并获取属性（存在的话）值
         var s = document.defaultView.getComputedStyle(elem,"");
-        console.log("W3C");
+        // console.log("W3C");
         return s && s.getPropertyValue(name);
     }else{
         // 否则，用户使用的是其他浏览器
-        console.log("Other");
+        // console.log("Other");
         return null;
     }
 
@@ -206,7 +206,7 @@ function restoreCSS( elem, prop ) {
 
 /** --------元素的可见性 ------------ */
 
-// ------ 使用CSS的display属性来切换元素可见性的一组函数--------
+// ------ 使用CSS的display属性来切换元素可见性的一组函数 --------
  // 使用display隐藏元素的函数
 function hide(elem) {
     // 找出元素display的当前状态
@@ -321,3 +321,88 @@ function getElementY(e) {
     // 获取正确的元素偏移量
     return ( e && e.layerY) || window.event.offsetY;
 }
+
+/** ---------- 视口 -------------*/
+
+/* ---------- 页面尺寸 -------------*/
+
+//------确定当前页面的高度和宽度的两个函数
+// 返回页面的高度（增加内容的时候可能会改变）
+function pageHeight() {
+    return document.body.scrollHeight;
+}
+// 返回页面的高度
+function pageWidth() {
+    return document.body.scrollWidth;
+}
+
+/* ---------- 滚动条的位置 -------------*/
+//-----------确定文档视口定位的两个函数
+//确定浏览器水平滚动位置的函数
+function scrollX() {
+    // 一个快捷方式，用在IE6/7的严格模式中
+    var de = document.documentElement;
+
+    // 如果浏览器存在 pageXOffset属性，则使用它
+    return self.pageXOffset ||
+            // 否则尝试获取根节点的左端滚动偏移量
+        (de && de.scrollLeft) ||
+            // 最后尝试获取body元素的左端滚动的偏移量
+        document.body.scrollLeft;
+}
+//确定浏览器垂直滚动位置的函数
+function scrollY() {
+    // 一个快捷方式，用在IE6/7的严格模式中
+    var de = document.documentElement;
+
+    // 如果浏览器存在 pageYOffset属性，则使用它
+    return self.pageYOffset ||
+        // 否则尝试获取根节点的顶端滚动偏移量
+        (de && de.scrollTop) ||
+        // 最后尝试获取body元素的顶端滚动的偏移量
+        document.body.scrollTop;
+}
+
+/* ---------- 移动滚动条 ------------- */
+//----------- 使用scrollTo 方法调整浏览器窗口位置的例子
+// 如果需要滚动到浏览器的顶端，你可以这么做
+// window.scrollTo(0,0);
+// 如果需要滚动到指定的元素，则可以这么做
+// window.scrollTo(0,pageY(document.getElementById('')));
+
+/* ---------- 视口尺寸 ------------- */
+//----------- 确定浏览器视口的高度和宽度的两个函数
+// 获取视口的高度
+function windowHeight() {
+    // 一个快捷方式，用在IE6/7的严格模式中
+    var de = document.documentElement;
+
+    // 如果浏览器存在innerHeight 属性，则使用它
+    return self.innerHeight ||
+            // 否则，尝试获取节点高度偏移量
+        (de && de.clientHeight) ||
+            // 最后，尝试获取body 元素的高度偏移量
+        document.body.clientHeight;
+}
+
+// 获取视口的宽度
+function windowWidth() {
+    // 一个快捷方式，用在IE6/7的严格模式中
+    var de = document.documentElement;
+
+    // 如果浏览器存在innerWidth 属性，则使用它
+    return self.innerWidth ||
+        // 否则，尝试获取节点宽度偏移量
+        (de && de.clientWidth) ||
+        // 最后，尝试获取body 元素的宽度偏移量
+        document.body.clientWidth;
+}
+
+
+
+
+
+
+
+
+

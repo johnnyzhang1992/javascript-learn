@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>JavaScript 与 CSS</title>
     <style>
+        body{padding: 0;margin: 0}
         .content{
-            margin: 0 auto;
-            margin-top: 50px;
-            width:1000px;
+            margin: 50px 100px 0;
+            /*width:1000px;*/
             padding: 50px 20px;
         }
         .item{
@@ -36,7 +36,18 @@
             addX(p,100);
             addY(p,50);
             slideDown(document.getElementById("slide-down"));
-            fadeIn(document.getElementById("fade-in"))
+            fadeIn(document.getElementById("fade-in"));
+            document.addEventListener('click',function (e) {
+                // 获取鼠标点击的坐标
+                console.log("X坐标："+getX(e));
+                console.log("Y坐标："+getY(e));
+            });
+            // 当前页面的高度和宽度
+            console.log("页面高度："+pageHeight());
+            console.log("页面宽度："+pageWidth());
+            // 当前页面的滚动条位置
+            console.log("左端滚动："+scrollX());
+            console.log("顶端滚动："+scrollY());
         }
     </script>
 </head>
