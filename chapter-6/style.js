@@ -397,8 +397,7 @@ function windowWidth() {
         // 最后，尝试获取body 元素的宽度偏移量
         document.body.clientWidth;
 }
-
-
+console.log('aaaaa');
 
 
 
