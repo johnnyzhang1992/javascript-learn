@@ -37,7 +37,8 @@ function getInputByName(name) {
 window.onload = function () {
     // 获得表单并监听提交事件
     console.log("加载完毕！");
-    document.getElementsByTagName("form")[0].onsubmit = function () {
+    document.getElementById('form').onsubmit = function () {
+        console.log("sssssss");
         // 获取需检查的input元素
         var elem = document.getElementById('age');
         // 确保年龄的必选字段已经被选中
