@@ -32,20 +32,21 @@ function getInputByName(name) {
             }
         }
     }
+    // 返回匹配的字段集合
+    return results;
 }
 // 等待文档完成加载
 window.onload = function () {
     // 获得表单并监听提交事件
     console.log("加载完毕！");
-    document.getElementById('form').onsubmit = function () {
-        console.log("sssssss");
+    document.getElementsByTagName('form')[0].onsubmit = function () {
         // 获取需检查的input元素
         var elem = document.getElementById('age');
         // 确保年龄的必选字段已经被选中
         if( !checkRequired(elem)){
             // 否则显示错误并组织表单提交
             console.warn("Required field is empty - "+ "you must be over 13 to use this site");
-            return false
+            return false;
         }
 
         // 获取需检查的input元素
