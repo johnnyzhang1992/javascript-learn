@@ -21,3 +21,5 @@ Ajax 方法中最重要的特性是允许数据在客户端（web浏览器）和
 - XML： 幸运的是，所有的现代浏览器都提供了原生的XML文档处理支持，自动将他们转换为可用的DOM文档
 - HTML： 和XML文档的区别在于，它通常以纯文本字符串的形式存在，存放一个HTML片段
 - JavaScript/JSON：这包括两种格式---原始的可执行JavaScript代码和JSON （javascript Object Notation，JavaScript对象表示）格式。
+
+### 数据的不同用途
