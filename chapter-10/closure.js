@@ -35,6 +35,7 @@ function foo1() {
 
 /**
  *  闭包是一个代码块（在 ECMAScript 是一个函数）和以静态方式（语法）方式进行存储的所有父作用域的一个集合体。
+ *  基本规则： JavaScript函数的执行用到了作用域链，这个作用域链是函数定义时创建的。
  */
 
 // 一个闭包对变量进行的修改会体现在另一个闭包对这些变量的读取上
@@ -52,7 +53,14 @@ console.log(
     closures.bar()
 );
 
+var scope = 'global scope';
+function checkscope(){
+    var scope = "local scope";
+    function f(){return scope;}
+    return f;
+}
 
+checkscope()();// local scope
 
 var data = [];
 for(var k = 0;k < 3; k++){
