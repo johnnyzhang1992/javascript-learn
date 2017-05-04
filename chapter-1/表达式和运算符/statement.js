@@ -32,3 +32,32 @@ try{
 }catch(ex){
     alert(ex);//告诉用户发生了什么错误
 }
+
+/*
+  ------with 语句-------
+  with语句用于临时扩展作用域链:
+
+  with(object)
+  statement
+
+  这条语句将object添加到作用域链的头部，然乎执行statement，
+  最后把作用于链回复到原始状态。
+ */
+
+with(document.forms[0]){
+    // 直接访问表单元素，例如:
+    name.value = "";//等价于 document.form[0].name.value
+    address.value = "";
+    email.value = "";
+}
+
+/*
+ debugger语句
+ 当调试程序可用并运行的时候，JavaScript解释器将会（非必需）以调试模式运行。
+ */
+
+/*
+  use strict
+
+  "use strict" 是ECMAScript 5引入的一条指令。指令不是语句。
+ */
