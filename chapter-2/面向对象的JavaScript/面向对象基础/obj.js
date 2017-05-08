@@ -46,6 +46,13 @@ User("Test");
 // 因为它的 “this” 上下文对象未曾设定，所以默认为全局的 ‘window’ 对象
 // console.info(window.name == "Test");//true
 
+/*
+* ES5 定义object。create()方法
+* 它创建一个新对象，其中第一个参数是这个对象的原型。
+* Object.create() 提供第二个可选参数，用以对对象的属性进行进一步描述。
+* */
+var o1 = Object.create({x:1,y:2});// o1 继承了属性x和y
+
 /** 使用 constructor 属性的例子 */
 //创建一个新的简单的 User 对象
 function User1() {}
@@ -55,3 +62,37 @@ var me1 = new User1();
 var you = new me1.constructor();
 // 你可以发现这两个对象的 constructor 实质上是一致的
 console.log(me1.constructor == you.constructor);//true
+
+/** 原型（prototype）*/
+/*
+  每一个JavaScript对象（null除外）都和另一个对象相关联。
+  “另一个”对象就是我们熟知的原型，每一个对象都从原型继承属性。
+ */
+
+/*
+* 通过原型继承创建一个新对象
+ */
+// inherit（） 返回一个继承自原型对象p的属性的新对象
+// 这里使用ECMAScript 5 中的Object.create()函数（如果存在的话）
+// 如果不存在Object.create()，则退化使用其他方法
+function inhert(p) {
+    if(p == null) throw TypeError(); // p是一个对象，但不能是null
+    if(Object.create){ // 如果方法存在
+        return Object.create(p); // 直接使用它
+    }
+    var t = typeof p; //否则进行进一步检测
+    if(t !== "object" && t!== "function"){
+        throw TypeError();
+    }
+    function f() {}; // 定义一个空构造函数
+    f.prototype = p; // 将其原型属性设置为p
+    return new f(); // 使用f()创建p的继承对象
+}
+
+/* 删除属性 */
+/*
+* 不能删除继承属性
+* 不能删除那些可配置性为false的属性
+* 不能能删除全局函数
+*
+ */
