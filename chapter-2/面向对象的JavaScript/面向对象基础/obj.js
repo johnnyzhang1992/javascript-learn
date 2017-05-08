@@ -96,3 +96,70 @@ function inhert(p) {
 * 不能能删除全局函数
 *
  */
+
+/*
+* 属性getter 和setter
+*
+* 存取器属性的四个特性是读取（get）、写入（set）、可枚举性和可配置性
+*Object.getOwnPropertyDescriptor()可以获得某个对象特定属性的描述符
+ */
+
+var p = {
+  // x和y是普通的可读写的数据属性
+    x:1.0,
+    y:1.0,
+
+    // r是可读写的存取器属性，他有getter和setter
+    // 函数体结束后不要忘记带上逗号
+    get r(){ return Math.sqrt(this.x*this.x +this.y*this.y);},
+    set r(newvalue){//r的值确定了，那么x,y的值要随之改变
+        var oldvalue = Math.sqrt(this.x*this.x +this.y*this.y);
+        var ratio = newvalue/oldvalue;
+        this.x *= ratio;
+        this.y *= ratio;
+    },
+    // theta 是只读存取器属性，它只有getter方法
+    get theta(){ return Math.atan2(this.y,this.x)}
+};
+
+var q = inhert(p);//创建一个继承getter和setter的新对象
+q.x = 1,q.y =1;//给q添加两个属性
+// r:1.4142135623730951
+// theta:0.7853981633974483
+// x:1
+// y:1
+
+/*
+ *
+ * 设置属性的特性
+ *
+ */
+var o = {};
+// 添加一个不可枚举的数据属性x,并赋值为1
+Object.defineProperty(o,"x",{
+    value: 1,
+    writable:true,
+    enumerable:false,
+    configurable: true
+});
+// 属性是存在的，但是不可枚举
+o.x;//1
+Object.keys(o);//[]
+Object.defineProperty(o,"x",{writable:false});
+o.x = 2;//赋值失败，但不报错
+o.x; //1
+// 属性依然是可配置的，因此可以通过这种方式对它进行修改
+Object.defineProperty(o,"x",{value:3});
+o.x;//3
+
+var _p = Object.defineProperties({},{
+    x:{value:1,writable:true,enumerable:true,configurable:true},
+    y:{value:1,writable:true,enumerable:true,configurable:true},
+    r:{
+        get: function () {
+            return Math.sqrt(this.x*this.x+this.y*this.y);
+        },
+        enumerable:true,
+        configurable:true
+    }
+});
