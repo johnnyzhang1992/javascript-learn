@@ -123,7 +123,7 @@ var p = {
 };
 
 var q = inhert(p);//创建一个继承getter和setter的新对象
-q.x = 1,q.y =1;//给q添加两个属性
+q.x = 1;q.y =1;//给q添加两个属性
 // r:1.4142135623730951
 // theta:0.7853981633974483
 // x:1
@@ -159,7 +159,42 @@ var _p = Object.defineProperties({},{
         get: function () {
             return Math.sqrt(this.x*this.x+this.y*this.y);
         },
+        set: function (newvalue) {
+            var oldvalue = Math.sqrt(this.x*this.x +this.y*this.y);
+            var ratio = newvalue/oldvalue;
+            this.x *= ratio;
+            this.y *= ratio;
+        },
         enumerable:true,
         configurable:true
     }
 });
+/*
+* 类属性
+ */
+
+// 返回传递给他的任意对象的类
+function classof(o){
+    if(o===null){return "Null";}
+    if(o=== undefined){return "Undefined"}
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+
+// 创建一个封闭对象，包括一个冻结的原型和一个不可枚举的属性
+ var obj22 = Object.seal(Object.create(Object.freeze({x:1}),{y:{value:2,writable:true}}));
+
+/*
+*
+* 对象序列化
+* 是指将对象的状态转换为字符串，也可以将字符串还原为对象
+*
+* JSON.stringify()和JSON.parse()用来序列化和还原JavaScript对象
+*
+ */
+
+
+/*
+*
+* 对象方法
+*
+ */
