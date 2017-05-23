@@ -20,3 +20,9 @@ function f1() {
 var f2 = function () {
 
 };
+
+// 定义匿名函数
+
+(function () {
+    console.log('aaaa')
+})();
