@@ -86,6 +86,15 @@ data1[1]();//1
 data1[2]();//2
 // 在作用域链中提供一个额外的对象-比如使用额外函数
 
+function constfuncs() {
+    var funcs = [];
+    for(var i = 0;i < 10;i++){
+        funcs[i] = function(){return i;};
+    }
+    return funcs;
+}
+var funcs = constfuncs();
+funcs[5]//10
 
 /**
  * this
