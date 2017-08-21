@@ -1,0 +1,167 @@
+/**
+ * Author johnnyZhang
+ * Site johnnyzhang.cn
+ * CreateTime 2017/8/21.
+ */
+//定义类
+class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    toString() {
+        return '(' + this.x + ', ' + this.y + ')';
+    }
+}
+// 上面代码定义了一个“类”，可以看到里面有一个constructor方法，这就是构造方法，
+// 而this关键字则代表实例对象。
+// 也就是说，ES5 的构造函数Point，对应 ES6 的Point类的构造方法
+
+class Point {
+    constructor() {
+        // ...
+    }
+
+    toString() {
+        // ...
+    }
+
+    toValue() {
+        // ...
+    }
+}
+
+// 等同于
+
+Point.prototype = {
+    constructor() {},
+    toString() {},
+    toValue() {},
+};
+// 在类的实例上面调用方法，其实就是调用原型上的方法。
+
+class B {}
+let b = new B();
+
+b.constructor === B.prototype.constructor; // true
+
+
+// constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法。
+// 一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加。
+
+class Point1 {
+}
+
+// 等同于
+class Point1 {
+    constructor() {}
+}
+
+// 类必须使用new调用，否则会报错。
+// 这是它跟普通构造函数的一个主要区别，后者不用new也可以执行。
+
+/*采用 Class 表达式，可以写出立即执行的 Class。*/
+
+let person = new class {
+    constructor(name) {
+        this.name = name;
+    }
+
+    sayName() {
+        console.log(this.name);
+    }
+}('张三');
+
+person.sayName(); // "张三"
+// 上面代码中，person是一个立即执行的类的实例。
+
+class ColorPoint extends Point {
+    constructor(x, y, color) {
+        super(x, y); // 调用父类的constructor(x, y)
+        this.color = color;
+    }
+
+    toString() {
+        return this.color + ' ' + super.toString(); // 调用父类的toString()
+    }
+}
+// 上面代码中，constructor方法和toString方法之中，都出现了super关键字，
+// 它在这里表示父类的构造函数，用来新建父类的this对象。
+//
+// 子类必须在constructor方法中调用super方法，否则新建实例时会报错。
+
+
+// 如果子类没有定义constructor方法，这个方法会被默认添加，代码如下。
+// 也就是说，不管有没有显式定义，任何一个子类都有constructor方法。
+
+class ColorPoint extends Point {
+}
+
+// 等同于
+class ColorPoint extends Point {
+    constructor(...args) {
+        super(...args);
+    }
+}
+//
+// 由于绑定子类的this，所以如果通过super对某个属性赋值，
+// 这时super就是this，赋值的属性会变成子类实例的属性。
+
+class A {
+    constructor() {
+        this.x = 1;
+    }
+}
+
+class B extends A {
+    constructor() {
+        super();
+        this.x = 2;
+        super.x = 3; // this.x = 3
+        console.log(super.x); // undefined //==A.prototype.x
+        console.log(this.x); // 3
+    }
+}
+
+let b = new B();
+// 上面代码中，super.x赋值为3，这时等同于对this.x赋值为3。
+// 而当读取super.x的时候，读的是A.prototype.x，所以返回undefined。
+
+Object.setPrototypeOf(B.prototype, A.prototype);
+// 等同于
+B.prototype.__proto__ = A.prototype;
+
+Object.setPrototypeOf(B, A);
+// 等同于
+B.__proto__ = A;
+
+// Mixin 模式指的是，将多个类的接口“混入”（mix in）另一个类。它在 ES6 的实现如下。
+
+function mix(...mixins) {
+    class Mix {}
+
+    for (let mixin of mixins) {
+        copyProperties(Mix, mixin);
+        copyProperties(Mix.prototype, mixin.prototype);
+    }
+
+    return Mix;
+}
+
+function copyProperties(target, source) {
+    for (let key of Reflect.ownKeys(source)) {
+        if ( key !== "constructor"
+            && key !== "prototype"
+            && key !== "name"
+        ) {
+            let desc = Object.getOwnPropertyDescriptor(source, key);
+            Object.defineProperty(target, key, desc);
+        }
+    }
+}
+// 上面代码的mix函数，可以将多个对象合成为一个类。使用的时候，只要继承这个类即可。
+
+class DistributedEdit extends mix(Loggable, Serializable) {
+    // ...
+}
