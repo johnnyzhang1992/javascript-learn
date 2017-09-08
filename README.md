@@ -62,3 +62,11 @@
 1. 闭包
 2. 上下文
 3.  this
+
+### ES6
+ES6的一些练习
+
+### JavascriptModule
+* AMD 
+* CommonJs
+* RequireJs
