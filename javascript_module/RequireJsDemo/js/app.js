@@ -9,7 +9,7 @@ require.config({
     baseUrl: "./js",
     paths: {
         "jquery": ["lib/jquery.min"],
-        "bootstrap": ['lib/bootstrap']
+        "bootstrap": ['lib/bootstrap.min']
     },
     // 第三方脚本模块的别名,jquery比libs/jquery-1.11.1.min.js简洁明了；
     shim: {
@@ -17,7 +17,7 @@ require.config({
             exports: 'jquery'
         },
         bootstrap: {
-            deps: ['jquery']//依赖文件
+            deps: ['lib/jquery.min']//依赖文件
         }
     }
 });
