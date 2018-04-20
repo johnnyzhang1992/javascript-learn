@@ -20,8 +20,10 @@ function push(array, ...items) {
     array.push(...items);
 }
 let arr = [1,2];
-push(arr,3,4,5,6,7);
-console.log(arr);//[1,2,3,4,5,6,7]
+push(arr,1,3,4,5,6,7);
+let new_arr = new Set([...arr]);
+console.log(new_arr);
+console.log(...[arr]);//[1,2,3,4,5,6,7]
 
 // 替代数组的 apply 方法
 // 由于扩展运算符可以展开数组，所以不再需要apply方法，将数组转为函数的参数了。
