@@ -127,3 +127,11 @@ let color5 = color3.splice(2,1,'white','gray');
 console.log(color5);// [ 'orange' ]
 console.log(color3);// [ 'blue', 'yellow', 'white', 'gray', 'black', 'purple' ]
 //分析： 从2开始，删除一项，添加两项，即其中替换一项，新增一项
+
+// 位置方法
+// indexOf lastIndexOf
+// 两个参数：要查找的项和（可选）表示查找起点位置的索引
+
+let numbers = [1,2,6,7,3,5,4,2];
+console.log(numbers.indexOf(2));//1
+console.log(numbers.lastIndexOf(2));//7
