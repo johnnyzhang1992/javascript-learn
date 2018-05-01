@@ -135,3 +135,61 @@ console.log(color3);// [ 'blue', 'yellow', 'white', 'gray', 'black', 'purple' ]
 let numbers = [1,2,6,7,3,5,4,2];
 console.log(numbers.indexOf(2));//1
 console.log(numbers.lastIndexOf(2));//7
+
+// 迭代方法
+console.log('----迭代方法---------');
+// 每个方法都包含两个参数：
+// 1) 要在每一项上运行的函数
+// 2)(可选)运行该函数的作用域对象---影响this的值
+
+// 该函数会传入三个参数：
+// 1) 数组项的值 value
+// 2) 该项再数组中的位置 index
+// 3) 数组对象本身 array
+
+// 五个方法
+// every filter forEach map some
+
+// every() &&
+// 数组中的每一项运行给定函数，如果每一项都返回true，那么返回true
+// 返回Boolean
+let everyResult = numbers.every(function (item,index,array) {
+   return (item>2);
+});
+// 判断是否每一项都大于2
+console.log(everyResult); //false
+
+// some() ||
+// 对数组中的每一项运行给定返回，如果该函数对任一项返回true，则返回true
+// 返回Boolean
+
+let someResult = numbers.some(function (item,index,array) {
+   return (item>2);
+});
+console.log(someResult);// true
+
+// filter()
+// 返回一个数组
+// 对数组中的每一项运行给定函数，返回该函数会返回true的项目组成的数组
+
+let filterResult = numbers.filter(function (item,index,array) {
+   return (item>2)
+});
+console.log(filterResult);// [ 6, 7, 3, 5, 4 ]
+
+// map()
+// 对数组中的每一项运行给定的函数，返回每次函数调用的结果组成的函数
+// 返回一个数组
+
+let mapResult = numbers.map(function (item,index,array) {
+    return item*2;
+});
+console.log(mapResult);// [ 2, 4, 12, 14, 6, 10, 8, 4 ]
+
+// forEach()
+// 对数组的每一项运行给定函数，没有返回值
+// 本质上与for 循环迭代数组一样
+numbers.forEach(function (item,index,array) {
+   array[index] = item*2;
+});
+console.log(numbers);//[ 2, 4, 12, 14, 6, 10, 8, 4 ]
