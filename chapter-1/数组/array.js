@@ -193,3 +193,22 @@ numbers.forEach(function (item,index,array) {
    array[index] = item*2;
 });
 console.log(numbers);//[ 2, 4, 12, 14, 6, 10, 8, 4 ]
+
+// 归并方法
+// reduce() and reduceRight()
+// 接收两个参数：
+// 1）一个在每一项上调用的函数
+// 2）（可选）作为归并基础的初始值
+// 这两个方法会迭代数组的所有项，然后构建一个最终返回的值。
+
+// 这两个函数接收四个参数：
+// 1）前一个值 pre
+// 2）当前值 cur
+// 3）项的索引
+// 4）数组对象
+// 这个函数返回的任何值都会作为第一参数自动传给下一项
+let values1 = [1,2,3,4,5];
+let sum = values1.reduce(function (pre,cur,index,array) {
+   return pre+cur;
+});
+console.log(sum);//15
