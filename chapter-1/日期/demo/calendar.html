@@ -107,12 +107,12 @@
     <div class="calender">
         <div class="title text-center">Calender</div>
         <div class="top-bar">
-            <div class="pre"><a class="btn" id="prev">Pre</a></div>
+            <div class="pre"><a class="btn" id="prev" onclick="Prev(this)">Pre</a></div>
             <div class="calender-month">
                 <p id="calendar-month">5</p>
                 <p id="calendar-year">2018</p>
             </div>
-            <div class="next"><a class="btn" id="next">Next</a></div>
+            <div class="next"><a class="btn" id="next" onclick="Next(this)">Next</a></div>
         </div>
         <div class="body">
             <div class="lightgrey body-list">
@@ -169,6 +169,8 @@
         let my_year = year ? year : cur_year;
         let my_month = month ? month : cur_month;
         let my_day = year ? 1 : cur_day;
+        cur_year = my_year;
+        cur_month = my_month;
         console.log(my_year,my_month,my_day);
         let totalDay = getMonthDays(my_year,my_month+1);
         let my_date = new Date(my_year,my_month);
@@ -193,6 +195,21 @@
         cyear.innerHTML = my_year; //设置年份显示
     };
     RenderCalender();
-
+    let Prev = (th)=>{
+        cur_month += -1;
+        if(cur_month<0){
+            cur_month = 11;
+            cur_year += -1;
+        }
+        RenderCalender(cur_year,cur_month)
+    };
+    let Next = (th)=>{
+        cur_month += 1;
+        if(cur_month>11){
+            cur_year += 1;
+            cur_month =1;
+        }
+        RenderCalender(cur_year,cur_month)
+    }
 </script>
 </html>
