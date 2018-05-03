@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>日历 demo</title>
+    <style>
+        html,body{
+            padding: 0;
+            margin: 0;
+        }
+        div.content{
+            width: 100%;
+            min-height: 300px;
+            position: relative;
+        }
+        div.calender{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            margin: 0 auto;
+            padding: 15px 0;
+            transform:translateX(-50%) translateY(-50%);
+            background-color: #f1f1f1;
+        }
+        .text-center{
+            text-align: center;
+        }
+        .top-bar{
+            display: flex;
+            flex-direction:row;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 6px 12px;
+            background-color: #43ce7b;
+            color: #fff;
+        }
+        .top-bar>div{
+            /*display: inline-flex;*/
+            flex-direction:row;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+        .top-bar .pre,.top-bar .next{
+            width: 40px;
+            flex-grow:1;
+            line-height: 60px;
+            cursor: pointer;
+        }
+        .top-bar .calender-month{
+            flex-grow: 2;
+        }
+        .calender p{
+            margin: 0;
+        }
+        .calender-month p#calender-month{
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .body-list ul{
+            width:100%;
+            font-family:arial;
+            font-weight:bold;
+            font-size:14px;
+        }
+        .body-list ul li{
+            width:14.28%;
+            height:36px;
+            line-height:36px;
+            list-style-type:none;
+            display:block;
+            box-sizing:border-box;
+            float:left;
+            text-align:center;
+        }
+        .lightgrey{
+            color:#a8a8a8; /*浅灰色*/
+        }
+        .darkgrey{
+            color:#565656; /*深灰色*/
+        }
+        .green{
+            color:#6ac13c; /*绿色*/
+        }
+        .greenbox{
+            border:1px solid #6ac13c;
+            background:#e9f8df; /*浅绿色背景*/
+        }
+        .calender .body ,.calender .body-list{
+            clear: both;
+            overflow: hidden;
+        }
+        .calender ul{
+            padding-left: 0;
+        }
+        p#calendar-month {
+            font-weight: bold;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h3 class="text-center">日历 demo</h3>
+    <div class="calender">
+        <div class="title text-center">Calender</div>
+        <div class="top-bar">
+            <div class="pre"><a class="btn" id="prev">Pre</a></div>
+            <div class="calender-month">
+                <p id="calendar-month">5</p>
+                <p id="calendar-year">2018</p>
+            </div>
+            <div class="next"><a class="btn" id="next">Next</a></div>
+        </div>
+        <div class="body">
+            <div class="lightgrey body-list">
+                <ul>
+                    <li>MON</li>
+                    <li>TUE</li>
+                    <li>WED</li>
+                    <li>THU</li>
+                    <li>FRI</li>
+                    <li>SAT</li>
+                    <li>SUN</li>
+                </ul>
+            </div>
+            <div class="darkgrey body-list">
+                <ul id="days">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let month_name = ["January","Febrary","March","April","May","June","July","Auguest","September","October","November","December"];
+
+    let holder = document.getElementById("days");
+    let prev = document.getElementById("prev");
+    let next = document.getElementById("next");
+    let ctitle = document.getElementById("calendar-month");
+    let cyear = document.getElementById("calendar-year");
+
+    let cur_date = new Date();
+    let cur_year = cur_date.getFullYear();
+    let cur_month = cur_date.getMonth();
+    let cur_day = cur_date.getDate();
+    // 获取当前月份的天数
+    let getCurrentMonthDays = ()=>{
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth()+1;
+        let d = new Date(year, month, 0);
+        return d.getDate();
+    };
+    // 获取指定年月的天数
+    let getMonthDays = (year, month)=>{
+        let d = new Date(year, month, 0);
+        return d.getDate();
+    };
+    //获取某年某月第一天是星期几
+    let dayStart = (month, year)=> {
+        let tmpDate = new Date(year, month, 1);
+        return (tmpDate.getDay());
+    };
+    let RenderCalender= (year,month)=>{
+        let my_year = year ? year : cur_year;
+        let my_month = month ? month : cur_month;
+        let my_day = year ? 1 : cur_day;
+        console.log(my_year,my_month,my_day);
+        let totalDay = getMonthDays(my_year,my_month+1);
+        let my_date = new Date(my_year,my_month);
+        let firstDay = dayStart(my_year,my_month);
+        let myClass = '';
+        let str ='';
+        for(let i=1; i<firstDay; i++){
+            str += "<li></li>"; //为起始日之前的日期创建空白节点
+        }
+        for(let i=1; i<=totalDay; i++){
+            if((i<my_day && my_year==my_date.getFullYear() && my_month==my_date.getMonth()) || my_year<my_date.getFullYear() || ( my_year==my_date.getFullYear() && my_month<my_date.getMonth())){
+                myClass = " class='lightgrey'"; //当该日期在今天之前时，以浅灰色字体显示
+            }else if (i==my_day && my_year==my_date.getFullYear() && my_month==my_date.getMonth()){
+                myClass = " class='green greenbox'"; //当天日期以绿色背景突出显示
+            }else{
+                myClass = " class='darkgrey'"; //当该日期在今天之后时，以深灰字体显示
+            }
+            str += "<li"+myClass+">"+i+"</li>"; //创建日期节点
+        }
+        holder.innerHTML = str; //设置日期显示
+        ctitle.innerHTML = month_name[my_month]; //设置英文月份显示
+        cyear.innerHTML = my_year; //设置年份显示
+    };
+    RenderCalender();
+
+</script>
+</html>

@@ -57,7 +57,7 @@ let getCurrentMonthDays = ()=>{
     return d.getDate();
 };
 // 获取指定年月的天数
-let  getMonthDays = (year, month)=>{
+let getMonthDays = (year, month)=>{
     let d = new Date(year, month, 0);
     return d.getDate();
 };
