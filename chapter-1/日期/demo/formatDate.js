@@ -64,4 +64,40 @@ Date.prototype.toString = function() {
 console.log((new Date()).valueOf().toString());//2018-05-06 00:14:56
 
 // 计算时间差
-
+let compareTime = (date)=>{
+    let cur_date = new Date().valueOf();
+    let pre_date = date ? (date.toString().length==13 ? date: date*1000): cur_date;
+    let date3 = cur_date - pre_date;
+    if(date3 == 0){
+        return '现在';
+    }
+    //计算出相差天数
+    let days=Math.floor(date3/(24*3600*1000));
+    //计算出小时数
+    let leave1=date3%(24*3600*1000);    //计算天数后剩余的毫秒数
+    let hours=Math.floor(leave1/(3600*1000));
+    //计算相差分钟数
+    let leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数
+    let minutes=Math.floor(leave2/(60*1000));
+    //计算相差秒数
+    let leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
+    let seconds=Math.round(leave3/1000);
+    if(seconds<15 && minutes<1 && hours < 1 && days<1){
+        return '刚刚';
+    }else if(seconds<60 && minutes<1 && hours < 1 && days<1){
+        return seconds+'秒前';
+    }else if(minutes<60 && hours < 1 && days<1){
+        return minutes+'分钟前';
+    }else if(hours<60 && days<1){
+        return hours+'小时前';
+    }else if(days>0 && days<32){
+        return  days+'天前';
+    }else{
+        return new Date(pre_date).toString();
+    }
+};
+console.log(compareTime(new Date().valueOf()-10*1000));
+console.log(compareTime(new Date().valueOf()-10*60*1000));
+console.log(compareTime(new Date().valueOf()-10*60*60*1000));
+console.log(compareTime(new Date().valueOf()-10*60*60*24*1000));
+console.log(compareTime(new Date().valueOf()-10*60*60*24*3*1000));
