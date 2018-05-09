@@ -20,3 +20,12 @@ function trim(str){
     let re = /^\s+|\s+$/g; // |代表或者   \s代表空格  +至少一个    前面有至少一个空格 或者后面有至少一个空格 且全局匹配
     return str.replace(re,''); //把空格替换成空
 }
+
+// 例子：从 URL 中提取子域名
+let url = "https://news.domain.com";
+let url_matches = /[^.]+/.exec(url);
+console.log(url_matches);
+console.log(/[^.]+/.exec(url)[0].toString().split('//')[1]); // news
+
+// 获取协议
+console.log(/https?/.exec(url)[0]); // https
