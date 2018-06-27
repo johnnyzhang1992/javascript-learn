@@ -42,9 +42,49 @@ const data = [
 ];
 
 console.log(tmpl(data));
+// 标签模板
+
+function SaferHTML(templateData) {
+    let s = templateData[0];
+    for (let i = 1; i < arguments.length; i++) {
+        let arg = String(arguments[i]);
+
+        // Escape special characters in the substitution.
+        s += arg.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        // Don't escape special characters in the template.
+        s += templateData[i];
+    }
+    return s;
+}
+let sender = '<script>alert("abc")</script>'; // 恶意代码
+let message = SaferHTML`<p>${sender} has sent you a message.</p>`;
+// <p>&lt;script&gt;alert("abc")&lt;/script&gt; has sent you a message.</p>
+console.log(message);
+
+// 作为函数，String.raw的代码实现基本如下。
+
+String.raw = function (strings, ...values) {
+    let output = '';
+    let index;
+    for (index = 0; index < values.length; index++) {
+        output += strings.raw[index] + values[index];
+    }
+
+    output += strings.raw[index];
+    return output;
+};
 
 // 可以将参数默认值设为undefined，表明这个参数是可以省略的。
 function foo(optional = undefined) {  }
+
+// 解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。
+// 由于undefined和null无法转为对象，所以对它们进行解构赋值，都会报错。
+
+// let { prop: x } = undefined; // TypeError
+// let { prop: y } = null; // TypeError
 
 // rest 参数
 // ES6 引入 rest 参数（形式为...变量名），用于获取函数的多余参数，这样就不需要使用arguments对象了。
