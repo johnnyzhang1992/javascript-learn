@@ -12,8 +12,9 @@
 
 const s = new Set();
 
-[2, 3, 5, 4, 5, 2, 2].forEach(x => s.add(x));
+[2, 3, 5, 4, 5, 2, 2].forEach((x) => s.add(x));
 
+console.log(s);
 for (let i of s) {
     console.log(i);
 }
@@ -63,14 +64,14 @@ const ws = new WeakSet();
 const obj = {};
 const foo = {};
 
-ws.add(window);
+// ws.add(window);
 ws.add(obj);
 
-ws.has(window); // true
+// ws.has(window); // true
 ws.has(foo);    // false
 
-ws.delete(window);
-ws.has(window);    // false
+// ws.delete(window);
+// ws.has(window);    // false
 
 // WeakSet没有size属性，没有办法遍历它的成员。
 
@@ -102,6 +103,7 @@ const set = new Set([
     ['bar', 2]
 ]);
 const m1 = new Map(set);
+console.log(m1);
 m1.get('foo'); // 1
 
 const m2 = new Map([['baz', 3]]);
@@ -141,15 +143,17 @@ const map0 = new Map()
     .set(1, 'a')
     .set(2, 'b')
     .set(3, 'c');
-
+console.log(map0);
 const map2 = new Map(
     [...map0].filter(([k, v]) => k < 3)
 );
+console.log(map2);
 // 产生 Map 结构 {1 => 'a', 2 => 'b'}
 
 const map3 = new Map(
     [...map0].map(([k, v]) => [k * 2, '_' + v])
 );
+console.log(map3);
 // 产生 Map 结构 {2 => '_a', 4 => '_b', 6 => '_c'}
 // 此外，Map 还有一个forEach方法，与数组的forEach方法类似，也可以实现遍历。
 
