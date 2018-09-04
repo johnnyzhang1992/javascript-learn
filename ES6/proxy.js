@@ -90,17 +90,100 @@ var proxy = new Proxy(person, {
 });
 
 proxy.name;// "张三"
-proxy.age; // 抛出一个错误
+// proxy.age; // 抛出一个错误
 
+/*
+// set()
+ */
 
+let validator = {
+    set: function(obj, prop, value) {
+        if (prop === 'age') {
+            if (!Number.isInteger(value)) {
+                throw new TypeError('The age is not an integer');
+            }
+            if (value > 200) {
+                throw new RangeError('The age seems invalid');
+            }
+        }
 
+        // 对于满足条件的 age 属性以及其他属性，直接保存
+        obj[prop] = value;
+    }
+};
 
+let person1 = new Proxy({}, validator);
 
+person1.age = 100;
 
+console.log(person1.age) ;// 100
+console.log(person1);
+// person1.age = 'young' ;// 报错 TypeError: The age is not an integer
+// person1.age = 300 ;// 报错 RangeError: The age seems invalid
 
+/*
+has()
+ */
+// has方法用来拦截HasProperty操作，即判断对象是否具有某个属性时，这个方法会生效。典型的操作就是in运算符。
 
+let stu1 = {name: '张三', score: 59};
+let stu2 = {name: '李四', score: 99};
 
+let handler1 = {
+    has(target, prop) {
+        if (prop === 'score' && target[prop] < 60) {
+            console.log(`${target.name}的分数是\'${target.score}\':不及格`);
+            return false;
+        }
+        return prop in target;
+    }
+};
 
+let oproxy1 = new Proxy(stu1, handler1);
+let oproxy2 = new Proxy(stu2, handler1);
 
+console.log('score' in oproxy1);
+// 张三 不及格
+// false
+console.log('score' in oproxy2);
+// true
+for (let a in oproxy1) {
+    console.log(oproxy1[a]);
+    //张三
+    // 59
+}
+// 张三
+// 59
 
+/*
+ownKeys()
+ */
+//ownKeys方法用来拦截对象自身属性的读取操作。具体来说，拦截以下操作。
 
+// Object.getOwnPropertyNames()
+// Object.getOwnPropertySymbols()
+// Object.keys()
+// for...in循环
+
+let target = {
+    a: 1,
+    b: 2,
+    c: 3
+};
+
+let handler2 = {
+    ownKeys(target) {
+        return ['a'];
+    }
+};
+
+let proxy3 = new Proxy(target, handler2);
+
+console.log(Object.keys(target));//[ 'a', 'b', 'c' ]
+console.log(Object.keys(proxy3)); // ['a'] 被拦截替换了原始真实数据
+
+//注意，使用Object.keys方法时，有三类属性会被ownKeys方法自动过滤，不会返回。
+//
+// 目标对象上不存在的属性
+// 属性名为 Symbol 值
+// 不可遍历（enumerable）的属性
