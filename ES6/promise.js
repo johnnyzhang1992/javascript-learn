@@ -77,6 +77,30 @@ console.log('Hi!');
 // then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。
 // 因此可以采用链式写法，即then方法后面再调用另一个then方法。
 
+const getJSON = function(url) {
+    const promise = new Promise(function(resolve, reject){
+        const handler = function() {
+            if (this.readyState !== 4) {
+                return;
+            }
+            if (this.status === 200) {
+                resolve(this.response);
+            } else {
+                reject(new Error(this.statusText));
+            }
+        };
+        const client = new XMLHttpRequest();
+        client.open("GET", url);
+        client.onreadystatechange = handler;
+        client.responseType = "json";
+        client.setRequestHeader("Accept", "application/json");
+        client.send();
+
+    });
+
+    return promise;
+};
+
 getJSON("/posts.json").then(function(json) {
     return json.post;
 }).then(function(post) {
@@ -121,3 +145,14 @@ p.then(response => console.log(response));
 p.catch(error => console.log(error));
 // 上面代码中，如果5秒之内fetch方法无法返回结果，
 // 变量p的状态就会变为rejected，从而触发catch方法指定的回调函数。
+
+// Promise.resolve();
+
+// Promise.reject();
+// Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected。
+
+// Promise.try()
+// Promise.try(database.users.get({id: userId}))
+//     .then(...)
+//     .catch(...)
+// 事实上，Promise.try就是模拟try代码块，就像promise.catch模拟的是catch代码块。
