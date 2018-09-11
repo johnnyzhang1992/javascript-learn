@@ -3,11 +3,6 @@
  * Site johnnyzhang.cn
  * CreateTime 2018/5/26.
  */
-/**
- * Author johnnyZhang
- * Site johnnyzhang.cn
- * CreateTime 2018/5/26.
- */
 let _aa = [{
     'id': 1,
     'name': '123'
@@ -49,4 +44,6 @@ function TwoArrDeleteSameDate(arr1,arr2,propertyName) {
     }
     return concatArr;
 }
+console.time('time');
 console.log(TwoArrDeleteSameDate(_aa,_bb,'id'));
+console.timeEnd('time');

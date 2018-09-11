@@ -63,4 +63,6 @@ let deleteSameIdObject = function (arr1,arr2,propertyName) {
     });
     return resultArr;
 };
+console.time('time');
 console.log(deleteSameIdObject(_aa,_bb,'id'));
+console.timeEnd('time');
