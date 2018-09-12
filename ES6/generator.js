@@ -29,18 +29,20 @@ function* helloWorldGenerator() {
     return 'ending';
 }
 
-var hw = helloWorldGenerator();
+let hw = helloWorldGenerator();
+// 调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，
+// 而是一个指向内部状态的指针对象，也就是上一章介绍的遍历器对象（Iterator Object）。
 
-hw.next();
+console.log(hw.next());
 // { value: 'hello', done: false }
 
-hw.next();
+console.log(hw.next());
 // { value: 'world', done: false }
 
-hw.next();
+console.log(hw.next());
 // { value: 'ending', done: true }
 
-hw.next();
+console.log(hw.next());
 // { value: undefined, done: true }
 
 
@@ -49,7 +51,7 @@ function* f() {
     console.log('执行了！')
 }
 
-var generator = f();
+let generator = f();
 
 setTimeout(function () {
     generator.next()
@@ -60,33 +62,34 @@ setTimeout(function () {
 
 // yield表达式如果用在另一个表达式之中，必须放在圆括号里面。
 
-function* demo() {
-    console.log('Hello' + yield); // SyntaxError
-    console.log('Hello' + yield 123); // SyntaxError
+// function* demo() {
+//     console.log('Hello' + yield); // SyntaxError
+//     console.log('Hello' + yield 123); // SyntaxError
+//
+//     console.log('Hello' + (yield)); // OK
+//     console.log('Hello' + (yield 123)); // OK
+// }
+// // yield表达式用作函数参数或放在赋值表达式的右边，可以不加括号。
+//
+// function* demo1() {
+//     foo(yield 'a', yield 'b'); // OK
+//     let input = yield; // OK
+// }
 
-    console.log('Hello' + (yield)); // OK
-    console.log('Hello' + (yield 123)); // OK
-}
-// yield表达式用作函数参数或放在赋值表达式的右边，可以不加括号。
 
-function* demo1() {
-    foo(yield 'a', yield 'b'); // OK
-    let input = yield; // OK
-}
-
-
-/*
+/**
  与 Iterator 接口的关系
  */
-
-var myIterable = {};
+// 任意一个对象的Symbol.iterator方法，等于该对象的遍历器生成函数，
+// 调用该函数会返回该对象的一个遍历器对象
+let myIterable = {};
 myIterable[Symbol.iterator] = function* () {
     yield 1;
     yield 2;
     yield 3;
 };
 
-[...myIterable]; // [1, 2, 3]
+console.log([...myIterable]); // [1, 2, 3]
 
 // Generator 函数赋值给Symbol.iterator属性，
 // 从而使得myIterable对象具有了 Iterator 接口，
@@ -149,7 +152,7 @@ function* numbers () {
     }
     yield 6;
 }
-var g = numbers();
+let g = numbers();
 g.next(); // { value: 1, done: false }
 g.next(); // { value: 2, done: false }
 g.return(7); // { value: 4, done: false }
@@ -212,30 +215,30 @@ function F() {
     return gen.call(gen.prototype);
 }
 
-var f = new F();
+let f1 = new F();
 
-f.next();  // Object {value: 2, done: false}
-f.next();  // Object {value: 3, done: false}
-f.next();  // Object {value: undefined, done: true}
+f1.next();  // Object {value: 2, done: false}
+f1.next();  // Object {value: 3, done: false}
+f1.next();  // Object {value: undefined, done: true}
 
-f.a; // 1
-f.b; // 2
-f.c; // 3
+f1.a; // 1
+f1.b; // 2
+f1.c; // 3
 
 // Ajax 是典型的异步操作，
 // 通过 Generator 函数部署 Ajax 操作，可以用同步的方式表达。
 
-function* main() {
-    var result = yield request("http://some.url");
-    var resp = JSON.parse(result);
-    console.log(resp.value);
-}
-
-function request(url) {
-    makeAjaxCall(url, function(response){
-        it.next(response);
-    });
-}
-
-var it = main();
-it.next();
+// function* main() {
+//     let result = yield request("http://some.url");
+//     let resp = JSON.parse(result);
+//     console.log(resp.value);
+// }
+//
+// function request(url) {
+//     makeAjaxCall(url, function(response){
+//         it.next(response);
+//     });
+// }
+//
+// let it = main();
+// it.next();

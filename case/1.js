@@ -129,3 +129,17 @@ function fb(n) {
 console.time('time4');
 console.log(fb(21)); //0.073ms
 console.timeEnd('time4');
+// generator
+function* fibonacci3() {
+    let [prev, curr] = [0, 1];
+    for (;;) {
+        yield curr;
+        [prev, curr] = [curr, prev + curr];
+    }
+}
+console.time('time5');
+for (let n of fibonacci3()) {
+    if (n > 1000) break;
+    console.log(n);
+}
+console.timeEnd('time5');
