@@ -90,3 +90,73 @@ for (let x of obj) {
 // "hello"
 // "world"
 // 上面代码中，Symbol.iterator方法几乎不用部署任何代码，只要用 yield 命令给出每一步的返回值即可。
+
+// for...of 循环
+const arr2 = ['red', 'green', 'blue'];
+// for...in循环读取键名
+for (let a in arr2) {
+    console.log(a); // 0 1 2 3
+}
+// for...in循环读取键值
+for(let v of arr2) {
+    console.log(v); // red green blue
+}
+
+const obj2 = {};
+obj2[Symbol.iterator] = arr2[Symbol.iterator].bind(arr2);
+
+for(let v of obj2) {
+    console.log(v); // red green blue
+}
+
+// for...of循环调用遍历器接口，数组的遍历器接口只返回具有数字索引的属性。
+
+let arr3 = [3, 5, 7];
+arr3.foo = 'hello';
+
+for (let i in arr3) {
+    console.log(i); // "0", "1", "2", "foo"
+}
+
+for (let i of arr3) {
+    console.log(i); //  "3", "5", "7"
+}
+
+// Set and Map
+let engines = new Set(["Gecko", "Trident", "Webkit", "Webkit"]);
+for (let e of engines) {
+    console.log(e);
+}
+// Gecko
+// Trident
+// Webkit
+
+let es6 = new Map();
+es6.set("edition", 6);
+es6.set("committee", "TC39");
+es6.set("standard", "ECMA-262");
+for (let [name, value] of es6) {
+    console.log(name + ": " + value);
+}
+// edition: 6
+// committee: TC39
+// standard: ECMA-262
+
+// 它可以与break、continue和return配合使用
+function fibonacci(n) {
+    let res = [1, 1];
+    if (n == 1 || n == 2) {
+        return 1;
+    }
+    for (let i = 2; i < n; i++) {
+        res[i] = res[i - 1] + res[i - 2];
+    }
+    // console.log(res);
+    return res;
+}
+
+for (let n of Array.from(fibonacci(100))) {
+    if (n > 100)
+        break;
+    console.log(n);
+}
