@@ -14,49 +14,54 @@ class Point {
         return '(' + this.x + ', ' + this.y + ')';
     }
 }
+let p = new Point(1, 2);
+console.log(`x=${p.x},y=${p.y}`);
+console.log(p.toString());
+
 // 上面代码定义了一个“类”，可以看到里面有一个constructor方法，这就是构造方法，
 // 而this关键字则代表实例对象。
 // 也就是说，ES5 的构造函数Point，对应 ES6 的Point类的构造方法
 
-class Point {
-    constructor() {
-        // ...
-    }
-
-    toString() {
-        // ...
-    }
-
-    toValue() {
-        // ...
-    }
-}
+// class Point {
+//     constructor() {
+//         // ...
+//     }
+//
+//     toString() {
+//         // ...
+//     }
+//
+//     toValue() {
+//         // ...
+//     }
+// }
 
 // 等同于
 
-Point.prototype = {
-    constructor() {},
-    toString() {},
-    toValue() {},
-};
+// Point.prototype = {
+//     constructor() {},
+//     toString() {},
+//     toValue() {},
+// };
 // 在类的实例上面调用方法，其实就是调用原型上的方法。
 
-class B {}
-let b = new B();
-
-b.constructor === B.prototype.constructor; // true
+// class B {}
+// let b = new B();
+//
+// b.constructor === B.prototype.constructor; // true
 
 
 // constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法。
 // 一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加。
 
-class Point1 {
-}
-
-// 等同于
-class Point1 {
-    constructor() {}
-}
+// class Point1 {
+//
+// }
+//
+// // 等同于
+// class Point1 {
+//     constructor() {}
+// }
 
 // 类必须使用new调用，否则会报错。
 // 这是它跟普通构造函数的一个主要区别，后者不用new也可以执行。
@@ -75,6 +80,53 @@ let person = new class {
 
 person.sayName(); // "张三"
 // 上面代码中，person是一个立即执行的类的实例。
+
+// this 的指向
+// 类的方法内部如果含有this，它默认指向类的实例
+
+// 一个比较简单的解决方法是，在构造方法中绑定this，这样就不会找不到print方法了。
+
+// class Logger {
+//     constructor() {
+//         this.printName = this.printName.bind(this);
+//     }
+//
+//     // ...
+// }
+
+// 另一种解决方法是使用箭头函数。
+
+// class Logger {
+//     constructor() {
+//         this.printName = (name = 'there') => {
+//             this.print(`Hello ${name}`);
+//         };
+//     }
+//
+//     // ...
+// }
+
+// 还有一种解决方法是使用Proxy，获取方法的时候，自动绑定this。
+
+// function selfish (target) {
+//     const cache = new WeakMap();
+//     const handler = {
+//         get (target, key) {
+//             const value = Reflect.get(target, key);
+//             if (typeof value !== 'function') {
+//                 return value;
+//             }
+//             if (!cache.has(value)) {
+//                 cache.set(value, value.bind(target));
+//             }
+//             return cache.get(value);
+//         }
+//     };
+//     const proxy = new Proxy(target, handler);
+//     return proxy;
+// }
+
+// const logger = selfish(new Logger());
 
 class ColorPoint extends Point {
     constructor(x, y, color) {
@@ -95,15 +147,15 @@ class ColorPoint extends Point {
 // 如果子类没有定义constructor方法，这个方法会被默认添加，代码如下。
 // 也就是说，不管有没有显式定义，任何一个子类都有constructor方法。
 
-class ColorPoint extends Point {
-}
-
-// 等同于
-class ColorPoint extends Point {
-    constructor(...args) {
-        super(...args);
-    }
-}
+// class ColorPoint extends Point {
+// }
+//
+// // 等同于
+// class ColorPoint extends Point {
+//     constructor(...args) {
+//         super(...args);
+//     }
+// }
 //
 // 由于绑定子类的this，所以如果通过super对某个属性赋值，
 // 这时super就是this，赋值的属性会变成子类实例的属性。
@@ -162,6 +214,6 @@ function copyProperties(target, source) {
 }
 // 上面代码的mix函数，可以将多个对象合成为一个类。使用的时候，只要继承这个类即可。
 
-class DistributedEdit extends mix(Loggable, Serializable) {
-    // ...
-}
+// class DistributedEdit extends mix(Loggable, Serializable) {
+//     // ...
+// }
