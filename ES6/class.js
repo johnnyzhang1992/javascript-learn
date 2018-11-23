@@ -128,6 +128,9 @@ person.sayName(); // "张三"
 
 // const logger = selfish(new Logger());
 
+/**
+ * 继承
+ */
 class ColorPoint extends Point {
     constructor(x, y, color) {
         super(x, y); // 调用父类的constructor(x, y)
@@ -138,6 +141,9 @@ class ColorPoint extends Point {
         return this.color + ' ' + super.toString(); // 调用父类的toString()
     }
 }
+let color_pointer = new ColorPoint(1,2,'red');
+console.log(color_pointer.x,color_pointer.y,color_pointer.toString());
+console.log(color_pointer instanceof ColorPoint);
 // 上面代码中，constructor方法和toString方法之中，都出现了super关键字，
 // 它在这里表示父类的构造函数，用来新建父类的this对象。
 //
@@ -160,25 +166,51 @@ class ColorPoint extends Point {
 // 由于绑定子类的this，所以如果通过super对某个属性赋值，
 // 这时super就是this，赋值的属性会变成子类实例的属性。
 
+// 父类的静态方法，也会被子类继承。
+
 class A {
     constructor() {
-        this.x = 1;
+        this.x = 111;
     }
 }
+
 
 class B extends A {
     constructor() {
         super();
-        this.x = 2;
-        super.x = 3; // this.x = 3
-        console.log(super.x); // undefined //==A.prototype.x
-        console.log(this.x); // 3
+        this.x = 212;
+        super.x = 323; // this.x = 323
+        console.log('super:'+super.x); // undefined //==A.prototype.x
+        console.log('this:'+this.x); // browser 323 editor 212
     }
 }
 
 let b = new B();
+
+// super作为对象时，在普通方法中，指向父类的原型对象；在静态方法中，指向父类。
+class A1 {
+    constructor(){
+        this.sayHello = 'hello'
+    }
+    p1() {
+        return 2222;
+    }
+}
+
+class B1 extends A1 {
+    constructor() {
+        super();
+        console.log(super.p1()); // 2
+        console.log(super.sayHello); //undefined
+        console.log(this.sayHello) // 'hello'
+    }
+}
+
+let b1 = new B1();
 // 上面代码中，super.x赋值为3，这时等同于对this.x赋值为3。
 // 而当读取super.x的时候，读的是A.prototype.x，所以返回undefined。
+
+// 由于对象总是继承其他对象的，所以可以在任意一个对象中，使用super关键字。
 
 Object.setPrototypeOf(B.prototype, A.prototype);
 // 等同于
@@ -188,6 +220,22 @@ Object.setPrototypeOf(B, A);
 // 等同于
 B.__proto__ = A;
 
+// 这两条继承链，可以这样理解：
+// 作为一个对象，子类（B）的原型（__proto__属性）是父类（A）；
+// 作为一个构造函数，子类（B）的原型对象（prototype属性）是父类的原型对象（prototype属性）的实例
+
+let p1 = new Point(2, 3);
+let p2 = new ColorPoint(2, 3, 'red');
+
+console.log(p2.__proto__ === p1.__proto__ );// false
+console.log(p2.__proto__.__proto__ === p1.__proto__ );// true
+
+/**
+ *
+ * @param mixins
+ * @returns {Mix}
+ */
+// Mixin 指的是多个对象合成一个新的对象，新对象具有各个组成成员的接口。
 // Mixin 模式指的是，将多个类的接口“混入”（mix in）另一个类。它在 ES6 的实现如下。
 
 function mix(...mixins) {
