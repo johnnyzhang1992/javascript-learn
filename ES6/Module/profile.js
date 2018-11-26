@@ -26,12 +26,23 @@
 //     v2 as streamLatestVersion
 // };
 
-export function area(radius) {
+// export function area(radius) {
+//     return Math.PI * radius * radius;
+// }
+// export function circumference(radius) {
+//     return 2 * Math.PI * radius;
+// }
+
+function area(radius) {
     return Math.PI * radius * radius;
 }
-export function circumference(radius) {
+function circumference (radius){
     return 2 * Math.PI * radius;
 }
+function exp(x) {
+    return Math.exp(x);
+}
+export { area, circumference, exp}
 // common.js
 // module.exports = {
 //     area:area,
