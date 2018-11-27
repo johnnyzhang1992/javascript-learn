@@ -42,7 +42,11 @@ function circumference (radius){
 function exp(x) {
     return Math.exp(x);
 }
-export { area, circumference, exp}
+let counter = 3;
+function incCounter() {
+    counter ++
+}
+export { area, circumference, exp,counter,incCounter}
 // common.js
 // module.exports = {
 //     area:area,
