@@ -1,4 +1,4 @@
-import * as f from "./profile";
+// import * as f from "./profile";
 
 /**
  * Author johnnyZhang
@@ -23,7 +23,10 @@ console.log('圆面积：' + ymj(4));
 console.log('圆周长：' + yzc(14));
 
 console.log(db);
-console.log(users);
+console.log(users.getUsers());// [ 'root', 'admin', 'staff', 'ceo', 'chief', 'moderator' ]
+//  class 实例化
+let user = new users('johnny');
+console.log(user.getName()); // user name is 'johnny'
 
 // ES6 模块不会缓存运行结果，而是动态地去被加载的模块取值，并且变量总是绑定其所在的模块。
 console.log(counter); //3
