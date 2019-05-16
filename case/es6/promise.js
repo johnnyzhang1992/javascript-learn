@@ -32,20 +32,20 @@ let promisefy = (fn) => {
 // })
 let test_promise = promisefy(test);
 async function f_async() { 
-    let value = await 1;
+    let value = await 111;
     console.log('---async--')
     console.log(value)
 }
 test_promise(1)
     .then((res) => {
         setTimeout(() => {
-            console.log('---settime---')
+            console.log('---settime1---')
         },0)
         console.log(res);
-        console.log('--then--')
+        console.log('--then--1')
         f_async();
         setTimeout(() => {
-            console.log('---settime---')
+            console.log('---settime2---')
         },0)
     },()=>{
         console.log('---reject')
