@@ -29,4 +29,5 @@ function flatArray1(arr) {
     }
     return new_arr;
 }
-console.log(flatArray1(arr))
+console.log(flatArray1(arr));
+     
