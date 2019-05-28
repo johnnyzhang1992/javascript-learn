@@ -6,15 +6,42 @@
     <title>Document</title>
 </head>
 <body>
-    <input id="button" type="button" value="调用parent.html中的say()函数" onclick="callParent()"/>
+    <input id="button" type="button" value="postMessage" onclick="callParent()"/>
     <script type="text/javascript">
         function say(){
-            alert("child.html");
+            // alert("child.html");
+            console.log('--child---')
         }
         function callParent(){
-            parent.say();
+            // console.log(parent)
+            // parent.say();
             parent.window.document.getElementById("button").value="调用结束";
+            parent.window.postMessage({'index': 'in child'}, "http://localhost:63342");
+            window.postMessage({'child': 'in child'}, "http://localhost:63342");
         }
+        window.postMessage({'child': 'in child',from: 'child-script'}, "http://localhost:63342");
+
+        parent.window.postMessage({'index': 'in child',from: 'child-script'}, "http://localhost:63342");
+
+        function receiveMessage(event){
+             // For Chrome, the origin property is in the event.originalEvent
+            // object. 
+            // 这里不准确，chrome没有这个属性
+            // var origin = event.origin || event.originalEvent.origin;
+            console.log(event)
+            var origin = event.origin;
+            if (origin !== "http://localhost:63342"){
+                return;
+            }
+            if(event.source == window.parent){
+                console.log('---message--from ---index')
+                console.log(event.data)
+            }
+
+
+            // ...
+        }
+        window.addEventListener("message", receiveMessage, false);
     </script>
 </body>
 </html>

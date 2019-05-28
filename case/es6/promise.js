@@ -47,7 +47,10 @@ test_promise(1)
         setTimeout(() => {
             console.log('---settime2---')
         },0)
+        return 'then1'
     },()=>{
         console.log('---reject')
     })
+    .then()
+    .then((res)=>{console.log('----then3');console.log(res)})
     .catch((err) => { console.log(err) });

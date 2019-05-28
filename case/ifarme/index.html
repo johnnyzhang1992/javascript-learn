@@ -6,6 +6,47 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <input id="button" type="button" value="postMessage" onclick="callChild()"/>
+    <iframe id="myFrame" name="myFrame" src="./child.html"></iframe>
+    <script type="text/javascript">
+        function say(){
+            // alert("parent.html");
+            console.log('---index--say')
+        }
+        function callChild(){
+            // console.log(myFrame)
+            // myFrame.window.say();
+
+            // myFrame.window.document.getElementById("button").value="调用结束";
+            window.postMessage({'message': 'in index function'}, "http://localhost:63342");
+
+
+        }
+        var my_frame = document.getElementById('myFrame');
+
+        window.postMessage({'message': 'index post message!',from: 'content-script'}, "http://localhost:63342");
+
+        my_frame.contentWindow.postMessage({'message': 'my_frame post message!',from: 'content-script'}, "http://localhost:63342")
+        // 假设当前页面没有改变location，这条语句会成功添加message到发送队列中去（targetOrigin设置对了）
+        // window.postMessage("hello child,i'm the index.html", "http://localhost:63342");
+
+        function receiveMessage(event)
+        {
+
+            console.log(event);
+            // 我们能相信信息的发送者吗?  (也许这个发送者和我们最初打开的不是同一个页面).
+            if (event.origin !== "http://localhost:63342"){
+                return;
+            }
+            if(event.source == my_frame.contentWindow){
+                console.log('---message--from ---myframe')
+                console.log(event.data)
+            }
+            // event.source 是我们通过window.open打开的弹出页面 popup
+            // event.data 是 popup发送给当前页面的消息 "hi there yourself!  the secret response is: rheeeeet!"
+        }
+
+        window.addEventListener("message", receiveMessage, true);
+    </script>
 </body>
 </html>
