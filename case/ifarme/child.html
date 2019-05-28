@@ -16,13 +16,16 @@
             // console.log(parent)
             // parent.say();
             parent.window.document.getElementById("button").value="调用结束";
-            parent.window.postMessage({'index': 'in child'}, "http://localhost:63342");
-            window.postMessage({'child': 'in child'}, "http://localhost:63342");
+            parent.window.postMessage({'index': 'in child'}, "http://127.0.0.1:8080/");
+            window.postMessage({'child': 'in child'}, "http://127.0.0.1:8080/");
         }
-        window.postMessage({'child': 'in child',from: 'child-script'}, "http://localhost:63342");
+        window.postMessage({'child': 'in child',from: 'child-script'}, "http://127.0.0.1:8080/");
 
-        parent.window.postMessage({'index': 'in child',from: 'child-script'}, "http://localhost:63342");
+        parent.window.postMessage({'index': 'in child',from: 'child-script'}, "http://127.0.0.1:8080/");
 
+        window.onload = function(){
+            parent.window.postMessage({from:'child','messge': 'child loaded'})
+        }
         function receiveMessage(event){
              // For Chrome, the origin property is in the event.originalEvent
             // object. 
@@ -30,8 +33,12 @@
             // var origin = event.origin || event.originalEvent.origin;
             console.log(event)
             var origin = event.origin;
-            if (origin !== "http://localhost:63342"){
+            if (origin !== "http://127.0.0.1:8080"){
                 return;
+            }
+            if(event.data){
+                console.log('---message--from ---index')
+                console.log(event.data)
             }
             if(event.source == window.parent){
                 console.log('---message--from ---index')
