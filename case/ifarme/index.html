@@ -7,7 +7,7 @@
 </head>
 <body>
     <input id="button" type="button" value="postMessage" onclick="callChild()"/>
-    <iframe id="myFrame" name="myFrame" src="./child.html"></iframe>
+    <iframe id="myFrame" name="myFrame" src="./child.html" sandbox="allow-forms allow-scripts allow-same-origin allow-modals"></iframe>
     <script type="text/javascript">
         function say(){
             // alert("parent.html");
@@ -50,6 +50,35 @@
         }
 
         window.addEventListener("message", receiveMessage, true);
+
+        window.addEventListener(
+			"beforeunload",
+			function(event) {
+				console.log(event);
+				event.cancelBubble = true;
+				event.preventDefault();
+				event.returnValue = "Do you want leave current page?";
+			},
+			{
+				passive: false,
+			},
+		);
+        document.body.addEventListener(
+			"pagehide",
+			function(event) {
+                console.log('----reload')
+				event.cancelBubble = true;
+				event.preventDefault();
+				event.returnValue = "Do you want leave current page?";
+			},
+			{
+				passive: false,
+			},
+		);
+        var oldWindowOpen =  window.open;
+        window.open = function(url){
+            console.log('---'+url)
+        }
     </script>
 </body>
 </html>

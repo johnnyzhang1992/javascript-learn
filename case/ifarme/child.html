@@ -1,54 +1,82 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <input id="button" type="button" value="postMessage" onclick="callParent()"/>
-    <script type="text/javascript">
-        function say(){
-            // alert("child.html");
-            console.log('--child---')
-        }
-        function callParent(){
-            // console.log(parent)
-            // parent.say();
-            parent.window.document.getElementById("button").value="调用结束";
-            parent.window.postMessage({'index': 'in child'}, "http://127.0.0.1:8080/");
-            window.postMessage({'child': 'in child'}, "http://127.0.0.1:8080/");
-        }
-        window.postMessage({'child': 'in child',from: 'child-script'}, "http://127.0.0.1:8080/");
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+	</head>
+	<body>
+		<input
+			id="button"
+			type="button"
+			value="postMessage"
+			onclick="callParent()"
+		/>
+		<p><a href="https://baidu.com" target="_parent">百度_parent</a></p>
+		<p><a href="https://baidu.com" target="_self">百度_self</a></p>
+		<p><a href="https://baidu.com" target="_blank">百度_blank</a></p>
 
-        parent.window.postMessage({'index': 'in child',from: 'child-script'}, "http://127.0.0.1:8080/");
+		<input type="button" value="打开新页面" onclick="openWindow()" />
+		<script type="text/javascript">
+			function openWindow() {
+				parent.window.open("https://weibo.com");
+			}
+			function say() {
+				// alert("child.html");
+				console.log("--child---");
+			}
+			function callParent() {
+				// console.log(parent)
+				// parent.say();
+				parent.window.document.getElementById("button").value =
+					"调用结束";
+				parent.window.postMessage(
+					{ index: "in child" },
+					"http://127.0.0.1:8080/",
+				);
+				window.postMessage(
+					{ child: "in child" },
+					"http://127.0.0.1:8080/",
+				);
+			}
+			window.postMessage(
+				{ child: "in child", from: "child-script" },
+				"http://127.0.0.1:8080/",
+			);
 
-        window.onload = function(){
-            parent.window.postMessage({from:'child','messge': 'child loaded'})
-        }
-        function receiveMessage(event){
-             // For Chrome, the origin property is in the event.originalEvent
-            // object. 
-            // 这里不准确，chrome没有这个属性
-            // var origin = event.origin || event.originalEvent.origin;
-            console.log(event)
-            var origin = event.origin;
-            if (origin !== "http://127.0.0.1:8080"){
-                return;
-            }
-            if(event.data){
-                console.log('---message--from ---index')
-                console.log(event.data)
-            }
-            if(event.source == window.parent){
-                console.log('---message--from ---index')
-                console.log(event.data)
-            }
+			parent.window.postMessage(
+				{ index: "in child", from: "child-script" },
+				"http://127.0.0.1:8080/",
+			);
 
+			window.onload = function() {
+				parent.window.postMessage({
+					from: "child",
+					messge: "child loaded",
+				});
+			};
+			function receiveMessage(event) {
+				// For Chrome, the origin property is in the event.originalEvent
+				// object.
+				// 这里不准确，chrome没有这个属性
+				// var origin = event.origin || event.originalEvent.origin;
+				console.log(event);
+				var origin = event.origin;
+				if (origin !== "http://127.0.0.1:8080") {
+					return;
+				}
+				if (event.data) {
+					console.log("---message--from ---index");
+					console.log(event.data);
+				}
+				if (event.source == window.parent) {
+					console.log("---message--from ---index");
+					console.log(event.data);
+				}
 
-            // ...
-        }
-        window.addEventListener("message", receiveMessage, false);
-    </script>
-</body>
+				// ...
+			}
+			window.addEventListener("message", receiveMessage, false);
+		</script>
+	</body>
 </html>
