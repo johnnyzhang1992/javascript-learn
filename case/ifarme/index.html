@@ -1,86 +1,161 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <input id="button" type="button" value="postMessage" onclick="callChild()"/>
-    <p><a href="https://baidu.com" target="_self">baidu</a></p>
-    <iframe id="myFrame" name="myFrame" src="./child.html"></iframe>
-    <script type="text/javascript">
-        function say(){
-            // alert("parent.html");
-            console.log('---index--say')
-        }
-        function callChild(){
-            // console.log(myFrame)
-            // myFrame.window.say();
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+	</head>
+	<body onpagehide="pageHide()">
+		<input
+			id="button"
+			type="button"
+			value="postMessage"
+			onclick="callChild()"
+		/>
+		<p><a href="https://baidu.com" target="_self">baidu</a></p>
+		<iframe id="myFrame" name="myFrame" src="./child.html"></iframe>
+		<script type="text/javascript">
+			function pageHide(event) {
+                console.log(event);
+				window.stop();
+				console.log(
+					"location: " +
+						document.location +
+						", state: " +
+						JSON.stringify(event.state),
+				);
+				event.preventDefault();
+			}
+			window.addEventListener(
+				"popstate",
+				event => {
+					alert("popstate");
+					window.stop();
+					console.log(
+						"location: " +
+							document.location +
+							", state: " +
+							JSON.stringify(event.state),
+					);
+					event.preventDefault();
+				},
+				false,
+			);
+			window.addEventListener(
+				"hashchange",
+				event => {
+					alert("popstate");
+					window.stop();
+					console.log(
+						"location: " +
+							document.location +
+							", state: " +
+							JSON.stringify(event.state),
+					);
+					event.preventDefault();
+				},
+				false,
+			);
+			function say() {
+				// alert("parent.html");
+				console.log("---index--say");
+			}
+			function callChild() {
+				// console.log(myFrame)
+				// myFrame.window.say();
 
-            // myFrame.window.document.getElementById("button").value="调用结束";
-            window.postMessage({'message': 'in index function'}, "http://127.0.0.1:8080");
+				// myFrame.window.document.getElementById("button").value="调用结束";
+				window.postMessage({ message: "in index function" }, "*");
+			}
+			var my_frame = document.getElementById("myFrame");
+			my_frame.setAttribute(
+				"sandbox",
+				"allow-forms allow-scripts allow-same-origin allow-modals",
+			);
+			window.postMessage(
+				{ message: "index post message!", from: "content-script" },
+				"*",
+			);
 
+			my_frame.contentWindow.postMessage(
+				{ message: "my_frame post message!", from: "content-script" },
+				"*",
+			);
+			// 假设当前页面没有改变location，这条语句会成功添加message到发送队列中去（targetOrigin设置对了）
+			// window.postMessage("hello child,i'm the index.html", "*/");
 
-        }
-        var my_frame = document.getElementById('myFrame');
-        my_frame.setAttribute('sandbox','allow-forms allow-scripts allow-same-origin allow-modals')
-        window.postMessage({'message': 'index post message!',from: 'content-script'}, "http://127.0.0.1:8080");
-
-        my_frame.contentWindow.postMessage({'message': 'my_frame post message!',from: 'content-script'}, "http://127.0.0.1:8080")
-        // 假设当前页面没有改变location，这条语句会成功添加message到发送队列中去（targetOrigin设置对了）
-        // window.postMessage("hello child,i'm the index.html", "http://127.0.0.1:8080/");
-
-        function receiveMessage(event)
-        {
-
-            console.log(event);
-            // 我们能相信信息的发送者吗?  (也许这个发送者和我们最初打开的不是同一个页面).
-            if (event.origin !== "http://127.0.0.1:8080"){
-                return;
-            }
-            if(event.source == my_frame.contentWindow){
-                console.log('---message--from ---myframe')
-                console.log(event.data)
-                if(event.data.from ==='child'){
-                    my_frame.contentWindow.postMessage({from: 'index',data: {user_id: 11111,game_key: 'ssseferwerw',token: ''}},'http://127.0.0.1:8080')
-                }
-            }
-            // event.source 是我们通过window.open打开的弹出页面 popup
-            // event.data 是 popup发送给当前页面的消息 "hi there yourself!  the secret response is: rheeeeet!"
-        }
-
-        window.addEventListener("message", receiveMessage, true);
-
-        // 新的网页覆盖当前页面
-        window.addEventListener(
-			"beforeunload",
-			function(event) {
+			function receiveMessage(event) {
 				console.log(event);
-                alert('离开当前页面？')
-				event.preventDefault();
-				event.returnValue = "Do you want leave current page?";
-			},
-			{
-				passive: false,
-			},
-		);
-        window.addEventListener(
-			"pagehide",
-			function(event) {
-                console.log('----reload')
-                alert('离开当前页面？')
-				event.preventDefault();
-				event.returnValue = "Do you want leave current page?";
-			},
-			{
-				passive: false,
-			},
-		);
-        var oldWindowOpen =  window.open;
-        window.open = function(url){
-            console.log('---'+url)
-        }
-    </script>
-</body>
+				// 我们能相信信息的发送者吗?  (也许这个发送者和我们最初打开的不是同一个页面).
+				if (event.origin !== "*") {
+					return;
+				}
+				if (event.source == my_frame.contentWindow) {
+					console.log("---message--from ---myframe");
+					console.log(event.data);
+					if (event.data.from === "child") {
+						my_frame.contentWindow.postMessage(
+							{
+								from: "index",
+								data: {
+									user_id: 11111,
+									game_key: "ssseferwerw",
+									token: "",
+								},
+							},
+							"*",
+						);
+					}
+				}
+				// event.source 是我们通过window.open打开的弹出页面 popup
+				// event.data 是 popup发送给当前页面的消息 "hi there yourself!  the secret response is: rheeeeet!"
+			}
+
+			window.addEventListener("message", receiveMessage, true);
+
+			// 新的网页覆盖当前页面
+			window.addEventListener(
+				"beforeunload",
+				function(event) {
+					console.log(event);
+					event.preventDefault();
+					window.stop();
+					event.returnValue = "";
+				},
+				{
+					passive: false,
+				},
+			);
+			window.addEventListener(
+				"pagehide",
+				function(event) {
+					console.log("----reload");
+					alert("离开当前页面？");
+					event.preventDefault();
+					event.returnValue = "Do you want leave current page?";
+				},
+				{
+					passive: false,
+				},
+			);
+
+			window.addEventListener(
+				"unload",
+				function(event) {
+					console.log("----reload");
+					alert("离开当前页面？");
+					event.preventDefault();
+					event.returnValue = "Do you want leave current page?";
+				},
+				{
+					passive: false,
+				},
+			);
+
+			var oldWindowOpen = window.open;
+			window.open = function(url) {
+				console.log("---" + url);
+			};
+		</script>
+	</body>
 </html>

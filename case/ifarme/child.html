@@ -17,9 +17,15 @@
 		<p><a href="https://baidu.com" target="_blank">百度_blank</a></p>
 
 		<input type="button" value="打开新页面" onclick="openWindow()" />
+		<p>
+			<input type="button" value="打开新页面1" onclick="openWindow1()" />
+		</p>
 		<script type="text/javascript">
 			function openWindow() {
 				parent.window.open("https://weibo.com");
+			}
+			function openWindow1(){
+				parent.window.location.href="https://baidu.com"
 			}
 			function say() {
 				// alert("child.html");
@@ -32,21 +38,21 @@
 					"调用结束";
 				parent.window.postMessage(
 					{ index: "in child" },
-					"http://127.0.0.1:8080/",
+					"*",
 				);
 				window.postMessage(
 					{ child: "in child" },
-					"http://127.0.0.1:8080/",
+					"*",
 				);
 			}
 			window.postMessage(
 				{ child: "in child", from: "child-script" },
-				"http://127.0.0.1:8080/",
+				"*",
 			);
 
 			parent.window.postMessage(
 				{ index: "in child", from: "child-script" },
-				"http://127.0.0.1:8080/",
+				"*",
 			);
 
 			window.onload = function() {
@@ -62,9 +68,6 @@
 				// var origin = event.origin || event.originalEvent.origin;
 				console.log(event);
 				var origin = event.origin;
-				if (origin !== "http://127.0.0.1:8080") {
-					return;
-				}
 				if (event.data) {
 					console.log("---message--from ---index");
 					console.log(event.data);
