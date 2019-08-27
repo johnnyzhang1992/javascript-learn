@@ -7,7 +7,8 @@
 </head>
 <body>
     <input id="button" type="button" value="postMessage" onclick="callChild()"/>
-    <iframe id="myFrame" name="myFrame" src="./child.html" sandbox="allow-forms allow-scripts allow-same-origin allow-modals"></iframe>
+    <p><a href="https://baidu.com" target="_self">baidu</a></p>
+    <iframe id="myFrame" name="myFrame" src="./child.html"></iframe>
     <script type="text/javascript">
         function say(){
             // alert("parent.html");
@@ -23,7 +24,7 @@
 
         }
         var my_frame = document.getElementById('myFrame');
-
+        my_frame.setAttribute('sandbox','allow-forms allow-scripts allow-same-origin allow-modals')
         window.postMessage({'message': 'index post message!',from: 'content-script'}, "http://127.0.0.1:8080");
 
         my_frame.contentWindow.postMessage({'message': 'my_frame post message!',from: 'content-script'}, "http://127.0.0.1:8080")
@@ -51,11 +52,12 @@
 
         window.addEventListener("message", receiveMessage, true);
 
+        // 新的网页覆盖当前页面
         window.addEventListener(
 			"beforeunload",
 			function(event) {
 				console.log(event);
-				event.cancelBubble = true;
+                alert('离开当前页面？')
 				event.preventDefault();
 				event.returnValue = "Do you want leave current page?";
 			},
@@ -63,11 +65,11 @@
 				passive: false,
 			},
 		);
-        document.body.addEventListener(
+        window.addEventListener(
 			"pagehide",
 			function(event) {
                 console.log('----reload')
-				event.cancelBubble = true;
+                alert('离开当前页面？')
 				event.preventDefault();
 				event.returnValue = "Do you want leave current page?";
 			},
